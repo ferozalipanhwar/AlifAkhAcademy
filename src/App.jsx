@@ -1,11 +1,14 @@
 
 import './App.css'
+import Home from './components/home/Home'
+import Navbar from './components/navbar/Navbar'
 
 function App() {
 
   return (
     <>
-      <h1>Alif Akh  Academy</h1>
+      <Navbar />
+      <Home />
     </>
   )
 }
