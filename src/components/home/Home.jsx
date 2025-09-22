@@ -1,23 +1,71 @@
 import React, { useState } from 'react'
 import '../../style/home.css'
 const Home = () => {
+    const slides = [
+        {
+            id: 1,
+            title: "Knowledge is Power",
+            subtitle: "Every Successful Career Starts with Good Education",
+            color: "bg-black",
+        },
+        {
+            id: 2,
+            title: "Learn Without Limits",
+            subtitle: "Education opens the door to success",
+            color: "bg-emerald-700",
+        },
+        {
+            id: 3,
+            title: "Shape Your Future",
+            subtitle: "Invest in knowledge, it pays the best interest",
+            color: "bg-gray-900",
+        },
+        {
+            id: 4,
+            title: "Success Starts Here",
+            subtitle: "Empowering students with quality learning",
+            color: "bg-blue-900",
+        },
+    ];
 
+    const [current, setCurrent] = useState(0);
 
     return (
-        <div id='bgImg' className='w-[100%] h-[100vh] bg-black bg_img text-center flex align-middle justify-center flex-col gap-2 '>
-            <div className='w-[100%] h-[80%] relative flex flex-col justify-center align-middle gap-5'>
-                <h1 className='text-7xl font-bold text-white z-10'>Knowledge is Power</h1>
-                <h4 className='text-2xl text-white'>Every Successful career starts with good education </h4>
-                <a href="" className='w-[10%] py-2 px-4 absolute top-[80%] left-[45%] translate-[-50px,-50px] bg-emerald-600 font-semibold rounded-3xl hover:bg-emerald-300 '>Learn More</a>
+        <div
+            id="bgImg"
+            className="w-full h-screen bg-black bg_img text-center flex flex-col justify-center items-center gap-5 px-4"
+        >
+            {/* Content Section */}
+            <div className="w-full max-w-3xl flex flex-col justify-center items-center gap-5">
+                <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mt-10">
+                    {slides[current].title}
+                </h1>
+                <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl text-white">
+                    {slides[current].subtitle}
+                </h4>
 
+                {/* Button */}
+                <a
+                    href="#"
+                    className="mt-10 w-40 sm:w-48 md:w-52 py-2 px-6 bg-emerald-600 text-white font-semibold rounded-3xl hover:bg-emerald-400 transition-all"
+                >
+                    Learn More
+                </a>
             </div>
-            <div className='w-[100%] flex align-middle justify-center border-amber-200 gap-3'>
-                <span className='w-3 h-3 border-1 rounded-lg border-emerald-300 cursor-pointer active:bg-emerald-600 active'></span>
-                <span className='w-3 h-3 border-1 rounded-lg border-emerald-300 cursor-pointer active:bg-emerald-600'></span>
-                <span className='w-3 h-3 border-1 rounded-lg border-emerald-300 cursor-pointer active:bg-emerald-600'></span>
-                <span className='w-3 h-3 border-1 rounded-lg border-emerald-300 cursor-pointer active:bg-emerald-600'></span>
+
+            {/* Dots Section */}
+            <div className="mt-10 flex justify-center gap-3">
+                {slides.map((_, index) => (
+                    <span
+                        key={index}
+                        onClick={() => setCurrent(index)}
+                        className={`w-3 h-3 rounded-full border border-emerald-300 cursor-pointer ${current === index ? "bg-emerald-600" : "bg-transparent"
+                            }`}
+                    ></span>
+                ))}
             </div>
         </div>
+
     )
 }
 
