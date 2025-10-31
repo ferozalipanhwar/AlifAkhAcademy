@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import '../../style/home.css'
+import { useState } from 'react';
+import '../../style/home.css';
 const Home = () => {
     const slides = [
         {
