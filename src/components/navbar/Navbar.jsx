@@ -20,7 +20,6 @@ export default function Navbar() {
         <ListItem  title="Home" />
         <ListItem  title="Courses" />
         <ListItem title="Teachers" />
-        <ListItem title="Programs" />
         <ListItem title="About Us" />
         <ListItem title="Contact" />
       </div>

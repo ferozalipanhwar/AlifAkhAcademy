@@ -46,7 +46,19 @@ const ContactSection = () => {
             </button>
           </form>
 
-          {/* Contact Info */}
+         
+        </div>
+
+        {/* Right Side — Map */}
+        <div className= "md:w-1/2 w-full display: flex; flex-direction: column; ">
+          <iframe
+            title="map"
+            className="w-full h-80 rounded-2x2 border"
+            src="https://www.google.com/maps?q=London&output=embed"
+            allowFullScreen
+            loading="lazy"
+          ></iframe>
+             {/* Contact Info */}
           <div className="pt-6 space-y-3 text-gray-700">
             <div className="flex items-center space-x-3">
               <span className="text-green-600 text-xl">📍</span>
@@ -62,17 +74,7 @@ const ContactSection = () => {
             </div>
           </div>
         </div>
-
-        {/* Right Side — Map */}
-        <div className="md:w-1/2 w-full">
-          <iframe
-            title="map"
-            className="w-full h-80 rounded-2xl border"
-            src="https://www.google.com/maps?q=London&output=embed"
-            allowFullScreen
-            loading="lazy"
-          ></iframe>
-        </div>
+      
       </div>
     </section>
   );

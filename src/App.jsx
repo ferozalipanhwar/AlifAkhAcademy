@@ -8,7 +8,7 @@ import FeaturesSection from './components/Feature/FeatureSection'
 import Footer from './components/Footer/Footer'
 import Home from './components/home/Home'
 import Navbar from './components/navbar/Navbar'
-import ProgramSection from './components/program/ProgramSection'
+import TeachersSection from './components/Teachers/TeachersSection'
 import TestimonialsSection from './components/Testimonials/TestimonialsSection'
 function App() {
 
@@ -19,7 +19,7 @@ function App() {
       <EducationSection/>
       <FeaturesSection/>
       <CoursesSection/>
-      <ProgramSection/>
+      <TeachersSection/>
       <TestimonialsSection/>
       <BlogSection/>
       <ContactSection/>

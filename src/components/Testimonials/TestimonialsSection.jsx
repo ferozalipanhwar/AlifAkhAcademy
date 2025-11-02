@@ -47,7 +47,7 @@ const TestimonialsSection = () => {
     <section id="Teachers" className="py-16 bg-gray-50">
       <div className="max-w-4xl mx-auto px-6 text-center">
         <h2 className="text-3xl font-bold mb-8 text-gray-800">
-          Our Teachers
+          our Happy Students
         </h2>
 
         {/* Avatar carousel */}
