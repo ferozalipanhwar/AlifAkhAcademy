@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -11,6 +12,8 @@ const courses = [
       "Learn HTML, CSS, JavaScript, and React to build real-world websites.",
     timing: "3 Months",
     teacher: "John Doe",
+    details:
+      "This course covers frontend technologies including HTML, CSS, JavaScript, and React. You’ll also learn how to host your projects and create responsive, interactive websites.",
   },
   {
     image:
@@ -20,6 +23,8 @@ const courses = [
       "Master Python, Pandas, and Machine Learning with practical projects.",
     timing: "4 Months",
     teacher: "Jane Smith",
+    details:
+      "Dive deep into data analysis, visualization, and machine learning using Python. You’ll gain hands-on experience with Pandas, NumPy, and Scikit-learn.",
   },
   {
     image:
@@ -29,10 +34,14 @@ const courses = [
       "Design beautiful, user-friendly interfaces and improve user experience.",
     timing: "2 Months",
     teacher: "Alice Johnson",
+    details:
+      "This course helps you understand design principles, wireframing, prototyping, and user research to create engaging and accessible UI/UX designs.",
   },
 ];
 
 const CoursesSection = () => {
+  const [selectedCourse, setSelectedCourse] = useState(null);
+
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -40,7 +49,7 @@ const CoursesSection = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
-    adaptiveHeight: true, // important for mobile
+    adaptiveHeight: true,
   };
 
   return (
@@ -57,7 +66,8 @@ const CoursesSection = () => {
         {courses.map((course, idx) => (
           <div
             key={idx}
-            className="bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl flex flex-col"
+            onClick={() => setSelectedCourse(course)}
+            className="cursor-pointer bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl flex flex-col"
           >
             <img
               src={course.image}
@@ -89,7 +99,11 @@ const CoursesSection = () => {
       <div className="md:hidden block">
         <Slider {...sliderSettings}>
           {courses.map((course, idx) => (
-            <div key={idx} className="px-4 py-4">
+            <div
+              key={idx}
+              onClick={() => setSelectedCourse(course)}
+              className="px-4 py-4 cursor-pointer"
+            >
               <div className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col">
                 <img
                   src={course.image}
@@ -128,6 +142,36 @@ const CoursesSection = () => {
           View All Courses →
         </a>
       </div>
+
+      {/* Course Detail Modal */}
+      {selectedCourse && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center px-4 z-50">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative animate-fadeIn">
+            <button
+              onClick={() => setSelectedCourse(null)}
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl"
+            >
+              &times;
+            </button>
+            <img
+              src={selectedCourse.image}
+              alt={selectedCourse.title}
+              className="w-full h-56 object-cover rounded-xl mb-4"
+            />
+            <h3 className="text-2xl font-bold mb-2 text-gray-800">
+              {selectedCourse.title}
+            </h3>
+            <p className="text-gray-600 mb-4">{selectedCourse.details}</p>
+            <div className="flex justify-between text-gray-700 mb-4">
+              <span>⏳ {selectedCourse.timing}</span>
+              <span>👨‍🏫 {selectedCourse.teacher}</span>
+            </div>
+            <button className="w-full bg-green-600 text-white py-2.5 rounded-xl hover:bg-green-700 transition">
+              Enroll Now
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
