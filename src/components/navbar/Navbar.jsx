@@ -6,7 +6,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav  className="w-full fixed bg-black px-5 md:px-20 py-5 flex items-center justify-between text-white z-40">
+    <nav  className="w-full fixed bg-black px-5 md:px-20 py-5 flex items-center justify-between text-white z-50">
       {/* Logo Section */}
       <div className="flex items-center gap-2">
         <img className="size-10 shrink-0" src="./images/logo.svg" alt="logo" />
