@@ -1,9 +1,11 @@
 
+import './App.css'
+
 function App() {
 
   return (
     <>
-   hh
+      <h1>Alif Akh  Academy</h1>
     </>
   )
 }
