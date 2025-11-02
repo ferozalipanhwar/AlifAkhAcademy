@@ -1,5 +1,6 @@
 
 import './App.css'
+import AboutUs from './components/About/AboutUs'
 import BlogSection from './components/Blog/BlogSection'
 import ContactSection from './components/Contact/ContactSection'
 import CoursesSection from './components/Courses/CoursesSection'
@@ -23,6 +24,7 @@ function App() {
       <TestimonialsSection/>
       <BlogSection/>
       <ContactSection/>
+      <AboutUs/>
       <Footer/>
     </>
   )

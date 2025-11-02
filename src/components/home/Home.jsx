@@ -31,6 +31,7 @@ const Home = () => {
     const [current, setCurrent] = useState(0);
 
     return (
+        <section id='Home'>
         <div
             id="bgImg"
             className="w-full h-screen bg-black bg_img text-center flex flex-col justify-center items-center gap-5 px-4"
@@ -65,7 +66,7 @@ const Home = () => {
                 ))}
             </div>
         </div>
-
+</section>
     )
 }
 

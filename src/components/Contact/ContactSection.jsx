@@ -1,7 +1,7 @@
 
 const ContactSection = () => {
   return (
-    <section className="bg-white py-12 px-6 md:px-16">
+    <section id="Contact" className="bg-white py-12 px-6 md:px-16">
       <h2 className="text-3xl font-semibold text-center mb-10 text-gray-800">
         Contact
       </h2>
