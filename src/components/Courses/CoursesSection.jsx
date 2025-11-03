@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
+
+
 
 const courses = [
   {
@@ -40,6 +43,7 @@ const courses = [
 ];
 
 const CoursesSection = () => {
+  const navigate = useNavigate();
   const [selectedCourse, setSelectedCourse] = useState(null);
 
   const sliderSettings = {
@@ -166,9 +170,14 @@ const CoursesSection = () => {
               <span>⏳ {selectedCourse.timing}</span>
               <span>👨‍🏫 {selectedCourse.teacher}</span>
             </div>
-            <button className="w-full bg-green-600 text-white py-2.5 rounded-xl hover:bg-green-700 transition">
-              Enroll Now
-            </button>
+             <button
+                 onClick={(e) => {
+                  e.stopPropagation();
+                     navigate("/course-register", { state: { courseTitle: selectedCourse.title } });
+                         }}
+                    className="w-full bg-green-600 text-white py-2.5 rounded-xl hover:bg-green-700 transition">
+                      Enroll Now
+                          </button>
           </div>
         </div>
       )}
