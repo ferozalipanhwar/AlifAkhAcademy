@@ -1,4 +1,5 @@
 
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import './App.css'
 import AboutUs from './components/About/AboutUs'
 import BlogSection from './components/Blog/BlogSection'
@@ -8,26 +9,39 @@ import EducationSection from './components/education/EducationSection'
 import FeaturesSection from './components/Feature/FeatureSection'
 import Footer from './components/Footer/Footer'
 import Home from './components/home/Home'
+import Login from './components/LoginRegister/Login'
+import Register from './components/LoginRegister/Register'
 import Navbar from './components/navbar/Navbar'
 import TeachersSection from './components/Teachers/TeachersSection'
 import TestimonialsSection from './components/Testimonials/TestimonialsSection'
 function App() {
-
   return (
     <>
-      <Navbar />
-      <Home />
-      <EducationSection/>
-      <FeaturesSection/>
-      <CoursesSection/>
-      <TeachersSection/>
-      <TestimonialsSection/>
-      <BlogSection/>
-      <ContactSection/>
-      <AboutUs/>
-      <Footer/>
+      <Router basename="/AlifAkhAcademy">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Navbar />
+                <Home />
+                <EducationSection />
+                <FeaturesSection />
+                <CoursesSection />
+                <TeachersSection />
+                <TestimonialsSection />
+                <BlogSection />
+                <ContactSection />
+                <AboutUs />
+                <Footer />
+              </>
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </Router>
     </>
-  )
+  );
 }
-
 export default App

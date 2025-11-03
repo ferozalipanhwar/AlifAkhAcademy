@@ -26,10 +26,15 @@ export default function Navbar() {
 
       {/* Buttons */}
       <div className="hidden md:flex items-center">
-        <button className="me-7 cursor-pointer hover:text-green-500">Login</button>
-        <button className="bg-emerald-500 px-5 py-2 cursor-pointer hover:bg-transparent border-1 rounded-full hover:bg-emerald-600 duration-300">
-          Register
-        </button>
+          <a href="/AlifAkhAcademy/login"> 
+                <button className="me-7 cursor-pointer hover:text-green-500">Login</button>
+          </a>
+          <a href="/AlifAkhAcademy/register"  > 
+              <button className="bg-emerald-500 px-5 py-2 cursor-pointer hover:bg-transparent border-1 rounded-full hover:bg-emerald-600 duration-300">
+            Register
+              </button>
+          </a>
+    
       </div>
 
       {/* Mobile Menu Button */}
