@@ -2,6 +2,11 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import './App.css'
 import AboutUs from './components/About/AboutUs'
+import Blogs from './components/Admin/Courses/Blogs'
+import Contacts from './components/Admin/Courses/Contacts'
+import CourseManager from './components/Admin/Courses/CourseManager'
+import Students from './components/Admin/Courses/Students'
+import Teachers from './components/Admin/Courses/Teachers'
 import BlogSection from './components/Blog/BlogSection'
 import ContactSection from './components/Contact/ContactSection'
 import CourseRoadmap from './components/Courses/CourseRoadmap'
@@ -15,6 +20,8 @@ import Register from './components/LoginRegister/Register'
 import Navbar from './components/navbar/Navbar'
 import TeachersSection from './components/Teachers/TeachersSection'
 import TestimonialsSection from './components/Testimonials/TestimonialsSection'
+import PageNotFOund from './components/UniversalComponents/PageNotFound'
+import AdminDashboard from './pages/AdminDashboard'
 import BlogDetail from './pages/BlogDetail'
 import CourseRegister from './pages/CourseRegister'
 
@@ -46,7 +53,15 @@ function App() {
           <Route path="/course-register" element={<><CourseRoadmap/><CourseRegister /> </>} />
            <Route path="/blogs" element={<BlogSection />} />
           <Route path="/blog/:id" element={<BlogDetail />} /> 
-          <Route path="*" element={<h2 className="text-center mt-20 text-3xl">404 - Page Not Found</h2>} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />}>
+          <Route path='courses' element={<CourseManager/>}/>
+          <Route path='teachers' element={<Teachers/>}/>
+          <Route path='students' element={<Students/>} />
+          <Route path='contacts' element={<Contacts/>} />
+          <Route path='blogs' element={<Blogs/>} />
+          <Route path='*' element={<PageNotFOund/>} />
+            </Route>
+          <Route path="*" element={<PageNotFOund/>} />
         </Routes>
       </Router>
     </>
