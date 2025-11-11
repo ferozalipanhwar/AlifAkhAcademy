@@ -48,11 +48,11 @@ export default function Navbar() {
       {isOpen && (
         <div className="absolute top-16 left-0 w-full bg-black flex flex-col items-center gap-5 py-5 md:hidden">
           <ListItem title="Home" />
-          <ListItem title="Course's" />
-          <ListItem title="Teacher" />
-          <ListItem title="Program's" />
+          <ListItem title="Courses" />
+          <ListItem title="Teachers" />
+          <ListItem title="Programs" />
           <ListItem title="About Us" />
-          <ListItem title="Contact Us" />
+          <ListItem title="Contact" />
 
           <div className="flex flex-col gap-3 w-full px-10">
             <button className="w-full border py-2 rounded">Login</button>

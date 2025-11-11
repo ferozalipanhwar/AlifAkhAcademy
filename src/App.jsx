@@ -7,6 +7,7 @@ import Contacts from './components/Admin/Courses/Contacts'
 import CourseManager from './components/Admin/Courses/CourseManager'
 import Students from './components/Admin/Courses/Students'
 import Teachers from './components/Admin/Courses/Teachers'
+import UsersList from './components/Admin/Courses/UsersList'
 import BlogSection from './components/Blog/BlogSection'
 import ContactSection from './components/Contact/ContactSection'
 import CourseRoadmap from './components/Courses/CourseRoadmap'
@@ -51,15 +52,18 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/course-register" element={<><CourseRoadmap/><CourseRegister /> </>} />
-           <Route path="/blogs" element={<BlogSection />} />
+          <Route path="/blogs" element={<BlogSection />} />
           <Route path="/blog/:id" element={<BlogDetail />} /> 
-          <Route path="/admin-dashboard" element={<AdminDashboard />}>
-          <Route path='courses' element={<CourseManager/>}/>
-          <Route path='teachers' element={<Teachers/>}/>
-          <Route path='students' element={<Students/>} />
-          <Route path='contacts' element={<Contacts/>} />
-          <Route path='blogs' element={<Blogs/>} />
-          <Route path='*' element={<PageNotFOund/>} />
+          
+             <Route path="/admin-dashboard" element={<AdminDashboard />}>
+                 <Route path='courses' element={<CourseManager/>}/>
+                 <Route path='teachers' element={<Teachers/>}/>
+                 <Route path='students' element={<Students/>} />
+                 <Route path='contacts' element={<Contacts/>} />
+                 <Route path='blogs' element={<Blogs/>} />
+                 <Route path='users' element={<UsersList/>} />
+                 <Route path='*' element={<PageNotFOund/>} />
+          
             </Route>
           <Route path="*" element={<PageNotFOund/>} />
         </Routes>

@@ -3,6 +3,13 @@ import { useState } from "react";
 import { FaCheck, FaEdit, FaPlusCircle, FaTrash } from "react-icons/fa";
 
 const CourseManager = () => {
+  // Example teacher list (you can replace with DB fetch)
+  const teachersList = [
+    { id: "t1", name: "Mr. Ahmed" },
+    { id: "t2", name: "Ms. Fatima" },
+    { id: "t3", name: "Sir John" },
+  ];
+
   const [courses, setCourses] = useState([
     {
       id: 1,
@@ -29,7 +36,6 @@ const CourseManager = () => {
 
   const [editingCourse, setEditingCourse] = useState(null);
 
-  // ✅ Add new course
   const handleAddCourse = (e) => {
     e.preventDefault();
     if (!newCourse.name || !newCourse.duration || !newCourse.teacher)
@@ -40,18 +46,15 @@ const CourseManager = () => {
     setNewCourse({ name: "", duration: "", desc: "", teacher: "" });
   };
 
-  // ✅ Delete course
   const handleDelete = (id) => {
     setCourses(courses.filter((course) => course.id !== id));
   };
 
-  // ✅ Start editing
   const handleEdit = (course) => {
     setEditingCourse(course);
     setNewCourse(course);
   };
 
-  // ✅ Update course
   const handleUpdateCourse = (e) => {
     e.preventDefault();
     setCourses(
@@ -100,24 +103,36 @@ const CourseManager = () => {
             placeholder="Course Name"
             className="p-2 rounded bg-gray-700 focus:outline-none w-full"
             value={newCourse.name}
-            onChange={(e) => setNewCourse({ ...newCourse, name: e.target.value })}
+            onChange={(e) =>
+              setNewCourse({ ...newCourse, name: e.target.value })
+            }
           />
           <input
             type="text"
             placeholder="Duration (e.g. 3 Months)"
             className="p-2 rounded bg-gray-700 focus:outline-none w-full"
             value={newCourse.duration}
-            onChange={(e) => setNewCourse({ ...newCourse, duration: e.target.value })}
+            onChange={(e) =>
+              setNewCourse({ ...newCourse, duration: e.target.value })
+            }
           />
         </div>
 
-        <input
-          type="text"
-          placeholder="Teacher Name"
+        {/* Dropdown for Teachers */}
+        <select
           className="p-2 rounded bg-gray-700 focus:outline-none w-full mt-4"
           value={newCourse.teacher}
-          onChange={(e) => setNewCourse({ ...newCourse, teacher: e.target.value })}
-        />
+          onChange={(e) =>
+            setNewCourse({ ...newCourse, teacher: e.target.value })
+          }
+        >
+          <option value="">Select Teacher</option>
+          {teachersList.map((t) => (
+            <option key={t.id} value={t.name}>
+              {t.name}
+            </option>
+          ))}
+        </select>
 
         <textarea
           placeholder="Course Description"
@@ -152,7 +167,9 @@ const CourseManager = () => {
         className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl"
       >
         {courses.length === 0 ? (
-          <p className="text-gray-400 text-center w-full">No courses added yet.</p>
+          <p className="text-gray-400 text-center w-full">
+            No courses added yet.
+          </p>
         ) : (
           courses.map((course) => (
             <motion.div
@@ -161,9 +178,13 @@ const CourseManager = () => {
               className="bg-gray-800 p-5 rounded-2xl shadow-xl flex flex-col justify-between border border-gray-700"
             >
               <div>
-                <h3 className="text-xl font-semibold mb-2 text-blue-400">{course.name}</h3>
+                <h3 className="text-xl font-semibold mb-2 text-blue-400">
+                  {course.name}
+                </h3>
                 <p className="text-gray-400 mb-1">{course.duration}</p>
-                <p className="text-gray-300 text-sm mb-1">👨‍🏫 {course.teacher}</p>
+                <p className="text-gray-300 text-sm mb-1">
+                  👨‍🏫 {course.teacher}
+                </p>
                 <p className="text-gray-400 text-sm">{course.desc}</p>
               </div>
 
