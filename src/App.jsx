@@ -25,6 +25,7 @@ import PageNotFOund from './components/UniversalComponents/PageNotFound'
 import AdminDashboard from './pages/AdminDashboard'
 import BlogDetail from './pages/BlogDetail'
 import CourseRegister from './pages/CourseRegister'
+import Profile from './pages/Profile'
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
           />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/course-register" element={<><CourseRoadmap/><CourseRegister /> </>} />
           <Route path="/blogs" element={<BlogSection />} />
           <Route path="/blog/:id" element={<BlogDetail />} /> 

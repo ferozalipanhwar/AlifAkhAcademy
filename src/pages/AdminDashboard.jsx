@@ -21,28 +21,22 @@ const AdminDashboard = () => {
   return (
     <div className="flex min-h-screen bg-gray-900 text-white">
 
-      {/*top bar with website name with beatifull style */}
-      <header className="w-full bg-gray-800  px-5 py-4 flex items-center  text-white fixed top-0 z-50 shadow-md">
-        <h1 className="text-2xl font-bold">Alif Akh Academy </h1>
+     <header className="w-full bg-gray-800 px-5 py-4 flex items-center text-white fixed top-0 z-50 shadow-md">
+  <h1 className="text-2xl font-bold">Alif Akh Academy</h1>
 
+  {/* Admin controls */}
+  <div className="ml-auto flex items-center gap-2">
+    <a href="/AlifAkhAcademy/" className="text-xl hover:text-blue-400">🏠</a>
+    <span className="text-xl">👤</span>
+    <span className="text-sm text-gray-400">Feroz Ali</span>
+    <div className="group relative">
+      <button className="ml-2 px-3 py-1 bg-red-600 rounded-md hover:bg-red-700 focus:outline-none">
+        Logout
+      </button>
+    </div>
+  </div>
+</header>
 
-
-      {/* admin name icon  and drop down hover  logout */}
-      <p className="ml-auto  flex items-center gap-2">
-        {/*  icon for go home page website */}
-       
-        <a href="/AlifAkhAcademy/" className="text-xl hover:text-blue-400">🏠</a>
-        
-        
-        <span className="text-xl">👤</span>
-        <p className="text-sm text-gray-400">Feroz ali</p>
-      <div className="group relative">
-        <button className="ml-2 px-3 py-1 bg-red-600 rounded-md hover:bg-red-700 focus:outline-none">
-          Logout
-        </button>
-      </div>
-      </p>
-      </header>
       {/* Sidebar */}
       <motion.div
         initial={{ x: -250 }}

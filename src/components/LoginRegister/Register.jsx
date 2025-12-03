@@ -1,5 +1,29 @@
 import { useState } from "react";
-import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
+import { Lock, Mail, User } from "lucide-react";
+const getMessageStyles = (type) => {
+  switch (type) {
+    case 'success':
+      return {
+        bgColor: 'bg-green-100',
+        textColor: 'text-green-700',
+        borderColor: 'border-green-400',
+      };
+    case 'error':
+      return {
+        bgColor: 'bg-red-100',
+        textColor: 'text-red-700',
+        borderColor: 'border-red-400',
+      };
+    case 'info':
+    default:
+      return {
+        bgColor: 'bg-blue-100',
+        textColor: 'text-blue-700',
+        borderColor: 'border-blue-400',
+      };
+  }
+};
+
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -9,19 +33,72 @@ const Register = () => {
     confirmPassword: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const [messageType, setMessageType] = useState('info'); 
+
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Register Data:", formData);
-    alert("Register button clicked (dummy)!");
+    
+
+    if (formData.password !== formData.confirmPassword) {
+      setMessageType('error');
+      return setMessage("❌ Passwords do not match!");
+    }
+
+    setLoading(true);
+    setMessage("");
+    setMessageType('info'); // Set to 'info' while loading/processing
+
+    try {
+     
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await res.json();
+      console.log(data);
+
+      if (res.ok) {
+    
+        setMessageType('success');
+        setMessage("✅ Registration successful!");
+        setFormData({ name: "", email: "", password: "", confirmPassword: "" }); // Clear form on success
+      } else {
+       
+        setMessageType('error');
+        setMessage(`❌ ${data.message || "Something went wrong!"}`);
+      }
+    }
+    catch (error) {
+
+      console.error(error);
+      setMessageType('error');
+      setMessage("❌ Server error, please try again!");
+    }
+
+    setLoading(false);
   };
+
+  const { bgColor, textColor, borderColor } = getMessageStyles(messageType);
+
 
   return (
     <div
       className="flex justify-center items-center min-h-screen bg-cover bg-center px-4"
-     style={{
+      style={{
         backgroundColor: "#e0f2fe",
       }}
     >
@@ -30,10 +107,17 @@ const Register = () => {
           📖 Create Your Account
         </h2>
 
+        {message && (
+          <p className={`text-center mb-4 font-semibold p-3 rounded-xl border-2 transition-all duration-300 ${borderColor} ${bgColor} ${textColor}`}>
+            {message}
+          </p>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Full Name */}
           <div className="flex items-center border border-gray-300 rounded-lg p-3 focus-within:ring-2 focus-within:ring-green-500 transition-all duration-300">
-            <FaUser className="text-green-600 mr-3" />
+            {/* Switched FaUser to User */}
+            <User className="text-green-600 mr-3 w-5 h-5" />
             <input
               type="text"
               name="name"
@@ -47,7 +131,8 @@ const Register = () => {
 
           {/* Email */}
           <div className="flex items-center border border-gray-300 rounded-lg p-3 focus-within:ring-2 focus-within:ring-green-500 transition-all duration-300">
-            <FaEnvelope className="text-green-600 mr-3" />
+            {/* Switched FaEnvelope to Mail */}
+            <Mail className="text-green-600 mr-3 w-5 h-5" />
             <input
               type="email"
               name="email"
@@ -61,7 +146,8 @@ const Register = () => {
 
           {/* Password */}
           <div className="flex items-center border border-gray-300 rounded-lg p-3 focus-within:ring-2 focus-within:ring-green-500 transition-all duration-300">
-            <FaLock className="text-green-600 mr-3" />
+            {/* Switched FaLock to Lock */}
+            <Lock className="text-green-600 mr-3 w-5 h-5" />
             <input
               type="password"
               name="password"
@@ -75,7 +161,8 @@ const Register = () => {
 
           {/* Confirm Password */}
           <div className="flex items-center border border-gray-300 rounded-lg p-3 focus-within:ring-2 focus-within:ring-green-500 transition-all duration-300">
-            <FaLock className="text-green-600 mr-3" />
+            {/* Switched FaLock to Lock */}
+            <Lock className="text-green-600 mr-3 w-5 h-5" />
             <input
               type="password"
               name="confirmPassword"
@@ -90,9 +177,10 @@ const Register = () => {
           {/* Button */}
           <button
             type="submit"
-            className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg transition-transform duration-300 transform hover:scale-105 shadow-md"
+            disabled={loading}
+            className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg transition-transform duration-300 transform hover:scale-105 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            ✨ Register
+            {loading ? "⏳ Registering..." : "✨ Register"}
           </button>
         </form>
 

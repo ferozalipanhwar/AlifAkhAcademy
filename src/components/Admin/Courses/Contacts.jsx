@@ -1,28 +1,46 @@
+import axios from "axios";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEnvelopeOpenText, FaTrashAlt, FaUserCircle } from "react-icons/fa";
 
 const Contacts = () => {
-  const [contacts, setContacts] = useState([
-    {
-      id: 1,
-      name: "Ali Raza",
-      email: "ali.raza@example.com",
-      message: "I’m interested in joining your Web Development course.",
-      date: "2025-11-02",
-    },
-    {
-      id: 2,
-      name: "Sara Khan",
-      email: "sara.khan@example.com",
-      message: "Can I get course timings and fee details?",
-      date: "2025-11-01",
-    },
-  ]);
+  const [contacts, setContacts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const handleDelete = (id) => {
-    setContacts(contacts.filter((msg) => msg.id !== id));
+  // Fetch all contacts from API
+  const fetchContacts = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/contact/all");
+      setContacts(res.data.contacts);
+      
+    } catch (err) {
+      console.error(err);
+      setError("Failed to fetch contact messages.");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    fetchContacts();
+  }, []);
+
+  // Delete a contact by ID
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this message?")) return;
+
+    try {
+      await axios.delete(`http://localhost:5000/api/contact/${id}`);
+      setContacts(contacts.filter((msg) => msg._id !== id));
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete message.");
+    }
+  };
+
+  if (loading) return <p className="text-center mt-10">Loading messages...</p>;
+  if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
 
   return (
     <motion.div
@@ -36,9 +54,7 @@ const Contacts = () => {
       </h2>
 
       {contacts.length === 0 ? (
-        <p className="text-center text-gray-400 mt-6">
-          No contact messages yet 📭
-        </p>
+        <p className="text-center text-gray-400 mt-6">No contact messages yet 📭</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
@@ -55,7 +71,7 @@ const Contacts = () => {
             <tbody>
               {contacts.map((msg, index) => (
                 <motion.tr
-                  key={msg.id}
+                  key={msg._id}
                   className="border-b border-gray-700 hover:bg-gray-700 transition-all"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -71,10 +87,12 @@ const Contacts = () => {
                     <FaEnvelopeOpenText className="text-yellow-400 mt-1" />
                     <span>{msg.message}</span>
                   </td>
-                  <td className="p-3 text-gray-400">{msg.date}</td>
+                  <td className="p-3 text-gray-400">
+                    {new Date(msg.createdAt).toLocaleDateString()}
+                  </td>
                   <td className="p-3 text-center">
                     <button
-                      onClick={() => handleDelete(msg.id)}
+                      onClick={() => handleDelete(msg._id)}
                       className="text-red-500 hover:text-red-400 transition"
                     >
                       <FaTrashAlt />
