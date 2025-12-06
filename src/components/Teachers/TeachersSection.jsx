@@ -1,19 +1,26 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-const teachers = [
-  { name: "Velvet Vachon", role: "Design Head", img: "https://randomuser.me/api/portraits/women/1.jpg" },
-  { name: "Arlene Anello", role: "SEO Head", img: "https://randomuser.me/api/portraits/women/2.jpg" },
-  { name: "Benton Colley", role: "Photography Head", img: "https://randomuser.me/api/portraits/men/1.jpg" },
-  { name: "Floyd Fukuda", role: "Marketing HOD", img: "https://randomuser.me/api/portraits/men/2.jpg" },
-  { name: "Elena Cully", role: "Design Head", img: "https://randomuser.me/api/portraits/women/3.jpg" },
-  { name: "Burton Brooke", role: "Web Technologist", img: "https://randomuser.me/api/portraits/men/3.jpg" },
-  { name: "Ressie Rottman", role: "Design Head", img: "https://randomuser.me/api/portraits/women/4.jpg" },
-  { name: "Reed Recio", role: "Photography Head", img: "https://randomuser.me/api/portraits/men/4.jpg" },
-  { name: "Nancee Bluford", role: "SEO Head", img: "https://randomuser.me/api/portraits/women/5.jpg" },
-];
-
+const api= "http://localhost:5000/api/teachers";
 const TeachersSlider = () => {
   const [current, setCurrent] = useState(0);
+  const [teachers,setTeachers]=useState([]);
+
+ const fetchTeachers=async()=>{
+ try {
+  const res=await axios.get(`${api}/`);
+  setTeachers(res.data);
+  console.log(res.data);
+ } catch (error) {
+  console.log(error,'not found teachers');
+  
+ }
+  
+ }
+ useEffect(()=>{
+  fetchTeachers();
+ },[])
+
 
   return (
     <section id="Teachers" className="bg-gray-50 py-12 px-6 text-center">
@@ -28,11 +35,11 @@ const TeachersSlider = () => {
           >
             <img
               src={teacher.img}
-              alt={teacher.name}
+              alt={teacher.fullname}
               className="w-24 h-24 object-cover rounded-full mb-4 border-4 border-emerald-500"
             />
-            <h3 className="text-lg font-semibold text-gray-800">{teacher.name}</h3>
-            <p className="text-emerald-600 text-sm font-medium">{teacher.role}</p>
+            <h3 className="text-lg font-semibold text-gray-800">{teacher.fullname}</h3>
+            <p className="text-emerald-600 text-sm font-medium">{teacher.courseId.title}</p>
           </div>
         ))}
       </div>

@@ -36,6 +36,7 @@ function App() {
             path="/"
             element={
               <>
+            
                 <Navbar />
                 <Home />
                 <EducationSection />

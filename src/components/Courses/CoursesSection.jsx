@@ -1,50 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
-
-
-
-const courses = [
-  {
-    image:
-      "https://images.unsplash.com/photo-1581091215365-64077c7b0f96?auto=format&fit=crop&w=800&q=80",
-    title: "Web Development",
-    description:
-      "Learn HTML, CSS, JavaScript, and React to build real-world websites.",
-    timing: "3 Months",
-    teacher: "John Doe",
-    details:
-      "This course covers frontend technologies including HTML, CSS, JavaScript, and React. You’ll also learn how to host your projects and create responsive, interactive websites.",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1581091012184-197af7a9889e?auto=format&fit=crop&w=800&q=80",
-    title: "Data Science",
-    description:
-      "Master Python, Pandas, and Machine Learning with practical projects.",
-    timing: "4 Months",
-    teacher: "Jane Smith",
-    details:
-      "Dive deep into data analysis, visualization, and machine learning using Python. You’ll gain hands-on experience with Pandas, NumPy, and Scikit-learn.",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1581090700223-45b30c4a7f8a?auto=format&fit=crop&w=800&q=80",
-    title: "UI/UX Design",
-    description:
-      "Design beautiful, user-friendly interfaces and improve user experience.",
-    timing: "2 Months",
-    teacher: "Alice Johnson",
-    details:
-      "This course helps you understand design principles, wireframing, prototyping, and user research to create engaging and accessible UI/UX designs.",
-  },
-];
-
+import API from "../../apiHelper/api.js";
 const CoursesSection = () => {
   const navigate = useNavigate();
+  const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
+
+  const fetchCourses = async () => {
+    try {
+      const res = await API.get("/courses/");
+    
+      const transformed = res.data.data.map((course) => ({
+        _id: course._id,
+        image: course.img || "https://via.placeholder.com/800x400", 
+        title: course.title,
+        description: course.description,
+        timing: course.duration,
+        teacher: course.teacherId.fullname,
+        details: course.description,
+      }));
+      setCourses(transformed);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCourses();
+  }, []);
 
   const sliderSettings = {
     dots: true,
@@ -67,9 +53,9 @@ const CoursesSection = () => {
 
       {/* Desktop View */}
       <div className="hidden md:grid md:grid-cols-3 gap-10">
-        {courses.map((course, idx) => (
+        {courses.map((course) => (
           <div
-            key={idx}
+            key={course._id}
             onClick={() => setSelectedCourse(course)}
             className="cursor-pointer bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl flex flex-col"
           >
@@ -102,9 +88,9 @@ const CoursesSection = () => {
       {/* Mobile View - Slider */}
       <div className="md:hidden block">
         <Slider {...sliderSettings}>
-          {courses.map((course, idx) => (
+          {courses.map((course) => (
             <div
-              key={idx}
+              key={course._id}
               onClick={() => setSelectedCourse(course)}
               className="px-4 py-4 cursor-pointer"
             >
@@ -170,14 +156,17 @@ const CoursesSection = () => {
               <span>⏳ {selectedCourse.timing}</span>
               <span>👨‍🏫 {selectedCourse.teacher}</span>
             </div>
-             <button
-                 onClick={(e) => {
-                  e.stopPropagation();
-                     navigate("/course-register", { state: { courseTitle: selectedCourse.title } });
-                         }}
-                    className="w-full bg-green-600 text-white py-2.5 rounded-xl hover:bg-green-700 transition">
-                      Enroll Now
-                          </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate("/course-register", {
+                  state: { courseTitle: selectedCourse.title },
+                });
+              }}
+              className="w-full bg-green-600 text-white py-2.5 rounded-xl hover:bg-green-700 transition"
+            >
+              Enroll Now
+            </button>
           </div>
         </div>
       )}

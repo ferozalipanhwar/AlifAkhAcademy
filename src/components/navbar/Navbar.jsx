@@ -10,12 +10,15 @@ export default function Navbar() {
   const token = localStorage.getItem("authToken");
   const isLoggedIn = !!token;
 
+  const isAdmin = user?.isAdmin === true; 
+
   const handleLogout = () => {
     localStorage.clear();
     window.location.href = "/";
   };
 
   return (
+  
     <nav className="w-full fixed bg-black px-5 md:px-20 py-5 flex items-center justify-between text-white z-50">
       {/* Logo */}
       <div className="flex items-center gap-2">
@@ -64,6 +67,15 @@ export default function Navbar() {
             {/* Profile Dropdown */}
             {profileOpen && (
               <div className="absolute right-0 mt-3 bg-white text-black rounded-xl shadow-lg w-48 py-3">
+
+                {isAdmin && (
+                  <a
+                    href="/AlifAkhAcademy/admin-dashboard"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    🛠️ Admin Dashboard
+                  </a>
+                )}
                 <a
                   href="profile"
                   className="block px-4 py-2 hover:bg-gray-100"
@@ -116,7 +128,17 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex flex-col gap-3 w-full px-10 text-white">
-              <a href="/profile">
+              {isAdmin && (
+                  <a
+                    href="/AlifAkhAcademy/admin-dashboard"
+                   
+                  >
+                    <button className="w-full border py-2 rounded"> Admin Dashboard</button>
+                
+                  </a>
+              )}
+
+              <a href="profile">
                 <button className="w-full border py-2 rounded">Profile</button>
               </a>
 

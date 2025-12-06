@@ -1,43 +1,15 @@
+import axios from "axios";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 
 const BlogManager = () => {
-  const [blogs, setBlogs] = useState([
-    {
-      id: 1,
-      title: "The Future of Web Development in 2025",
-      author: "Feroz Ali Panhwar",
-      category: "Web Development",
-      image:
-        "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80",
-      createdAt: "2025-11-06T10:00:00Z",
-      content:
-        "With the rapid evolution of frameworks and AI-assisted coding, web development in 2025 is becoming faster and more dynamic. Developers now rely on automation and smart deployment tools to build applications efficiently.",    
-    },
-    {
-      id: 2,
-      title: "Top 10 React Tips for Modern Developers", 
-      author: "Sara Khan",
-      category: "React JS",
-      image:
-        "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=800&q=80",
-      createdAt: "2025-10-30T12:30:00Z",
-      content:
-        "React continues to dominate frontend development. Here are 10 practical tips for writing cleaner, more efficient React code in 2025.",    
-    },
-    {
-      id: 3,
-      title: "Understanding Voice-Enabled E-Commerce",
-      author: "Ali Raza",
-      category: "E-Commerce",
-      image:
-        "https://images.unsplash.com/photo-1584697964180-7b43878e84e0?auto=format&fit=crop&w=800&q=80",
-      createdAt: "2025-09-15T09:00:00Z",
-      content:
-        "As voice search becomes more prevalent, e-commerce businesses must adapt their strategies. This blog explores the impact of voice technology on online shopping.", 
-    },   
-  ]);
+  const API = "http://localhost:5000/api/blog";
+  const token = localStorage.getItem("authToken"); // admin token
+
+  const [blogs, setBlogs] = useState([]);
+  const [fileInput, setFileInput] = useState(null);
+
   const [newBlog, setNewBlog] = useState({
     title: "",
     content: "",
@@ -46,53 +18,94 @@ const BlogManager = () => {
     image: "",
   });
 
-  // ✅ Handle Image Upload
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setNewBlog({ ...newBlog, image: reader.result });
-      reader.readAsDataURL(file);
+  // 🚀 Load Blogs from Backend
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  const fetchBlogs = async () => {
+    try {
+      const res = await axios.get(`${API}/`);
+      setBlogs(res.data);
+  
+    } catch (err) {
+      console.log(err);
     }
   };
 
-  // ✅ Add Blog
-  const handleAddBlog = () => {
+  // 📤 Handle Image Upload (Preview + File Save)
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    setFileInput(file);
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setNewBlog({ ...newBlog, image: reader.result });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // ➕ Add Blog (POST API)
+  const handleAddBlog = async () => {
     if (
       !newBlog.title ||
       !newBlog.content ||
-      !newBlog.image ||
       !newBlog.author ||
-      !newBlog.category
+      !newBlog.category ||
+      !fileInput
     ) {
-      return alert("⚠️ Please fill in all fields and upload an image!");
+      return alert("⚠️ Please fill all fields & upload an image!");
     }
 
-    const newEntry = {
-      id: Date.now(),
-      ...newBlog,
-      createdAt: new Date().toISOString(),
-    };
+    const formData = new FormData();
+    formData.append("title", newBlog.title);
+    formData.append("content", newBlog.content);
+    formData.append("author", newBlog.author);
+    formData.append("category", newBlog.category);
+    formData.append("img", fileInput);
 
-    setBlogs([...blogs, newEntry]);
-    setNewBlog({
-      title: "",
-      content: "",
-      author: "",
-      category: "",
-      image: "",
-    });
+    try {
+      const res = await axios.post(`${API}/create`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      alert("✅ Blog added successfully!");
+      setBlogs([...blogs, res.data.blog]);
+
+      setNewBlog({
+        title: "",
+        content: "",
+        author: "",
+        category: "",
+        image: "",
+      });
+      setFileInput(null);
+    } catch (err) {
+      console.log(err);
+      alert("❌ Error adding blog");
+    }
   };
 
-  // ✅ Delete Blog
-  const handleDeleteBlog = (id) => {
-    setBlogs(blogs.filter((blog) => blog.id !== id));
+  // 🗑 Delete Blog
+  const handleDeleteBlog = async (id) => {
+    try {
+      await axios.delete(`${API}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setBlogs(blogs.filter((blog) => blog._id !== id));
+    } catch (err) {
+      console.log(err);
+      alert("❌ Error deleting blog");
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-950 text-white py-10 px-4 md:px-10">
       <h1 className="text-4xl font-bold mb-10 text-center text-indigo-400">
-        📝 Blog Manager
+        📝 Blog Manager (Live API Connected)
       </h1>
 
       {/* Add Blog Form */}
@@ -118,7 +131,9 @@ const BlogManager = () => {
           <textarea
             placeholder="Write your blog content..."
             value={newBlog.content}
-            onChange={(e) => setNewBlog({ ...newBlog, content: e.target.value })}
+            onChange={(e) =>
+              setNewBlog({ ...newBlog, content: e.target.value })
+            }
             rows="4"
             className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:border-indigo-400 outline-none"
           />
@@ -128,7 +143,9 @@ const BlogManager = () => {
               type="text"
               placeholder="Author Name"
               value={newBlog.author}
-              onChange={(e) => setNewBlog({ ...newBlog, author: e.target.value })}
+              onChange={(e) =>
+                setNewBlog({ ...newBlog, author: e.target.value })
+              }
               className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:border-indigo-400 outline-none"
             />
 
@@ -178,19 +195,19 @@ const BlogManager = () => {
         </h2>
 
         {blogs.length === 0 ? (
-          <p className="text-center text-gray-400">No blogs added yet.</p>
+          <p className="text-center text-gray-400">No blogs found.</p>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {blogs.map((blog) => (
               <motion.div
-                key={blog.id}
+                key={blog._id}
                 className="bg-gray-900 rounded-2xl overflow-hidden shadow-md hover:shadow-indigo-500/30 transition"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
               >
                 <img
-                  src={blog.image}
+                  src={blog.img}
                   alt={blog.title}
                   className="w-full h-40 object-cover"
                 />
@@ -199,15 +216,10 @@ const BlogManager = () => {
                     {blog.title}
                   </h3>
                   <p className="text-sm text-gray-400 mb-2">
-                    <span className="font-semibold text-gray-300">
-                      Author:
-                    </span>{" "}
-                    {blog.author}
+                    <span className="font-semibold">Author:</span> {blog.author}
                   </p>
                   <p className="text-sm text-gray-400 mb-2">
-                    <span className="font-semibold text-gray-300">
-                      Category:
-                    </span>{" "}
+                    <span className="font-semibold">Category:</span>{" "}
                     {blog.category}
                   </p>
                   <p className="text-sm text-gray-400 mb-3">
@@ -218,7 +230,7 @@ const BlogManager = () => {
                   </p>
 
                   <button
-                    onClick={() => handleDeleteBlog(blog.id)}
+                    onClick={() => handleDeleteBlog(blog._id)}
                     className="mt-3 flex items-center gap-2 bg-red-600 hover:bg-red-500 transition-all px-4 py-2 rounded-lg text-sm font-medium"
                   >
                     <FaTrash /> Delete

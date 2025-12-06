@@ -1,48 +1,31 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+const api="http://localhost:5000/api/blog";
 
-const blogs = [
-  {
-    _id: { $oid: "690cd74f4180c1c83002cd98" },
-    title: "The Future of Web Development in 2025",
-    author: "Feroz Ali Panhwar",
-    category: "Web Development",
-    img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80",
-    createdAt: "Nov 6, 2025",
-    content: `
-      With the rapid evolution of frameworks and AI-assisted coding, web development in 2025 
-      is becoming faster and more dynamic. Developers now rely on automation and smart deployment 
-      tools to build applications efficiently.
-    `,
-  },
-  {
-    _id: { $oid: "690cd74f4180c1c83002cd99" },
-    title: "Top 10 React Tips for Modern Developers",
-    author: "Sara Khan",
-    category: "React JS",
-    img: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=800&q=80",
-    createdAt: "Oct 30, 2025",
-    content: `
-      React continues to dominate frontend development. Here are 10 practical tips for writing 
-      cleaner, more efficient React code in 2025.
-    `,
-  },
-  {
-    _id: { $oid: "690cd74f4180c1c83002cd9a" },
-    title: "Understanding Voice-Enabled E-Commerce",
-    author: "Feroz Ali Panhwar",
-    category: "AI & E-Commerce",
-    img: "https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&fit=crop&w=800&q=80",
-    createdAt: "Sep 15, 2025",
-    content: `
-      Voice-enabled shopping is revolutionizing how users interact with online stores. 
-      Integrating AI assistants like Alan AI and Google Voice APIs can significantly 
-      improve accessibility and convenience.
-    `,
-  },
-];
+
 
 const BlogSection = () => {
   const navigate = useNavigate();
+  const [blogs,setBlogs]=useState([]);
+  
+  const fetchBlogs=async()=>{
+    try {
+      const res=await axios.get(`${api}/`)
+      setBlogs(res.data);
+   
+      
+     
+      
+    } catch (error) {
+      console.log('blogs not founded',error);
+      
+      
+    }
+  }
+  useEffect(()=>{
+    fetchBlogs();
+  },[])
 
   return (
     <section className="py-12 bg-gray-50">

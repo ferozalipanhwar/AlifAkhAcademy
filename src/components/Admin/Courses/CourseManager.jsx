@@ -1,88 +1,152 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
-import { FaCheck, FaEdit, FaPlusCircle, FaTrash } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaEdit, FaPlusCircle } from "react-icons/fa";
+import API from "../../../apiHelper/api.js";
 
 const CourseManager = () => {
-  // Example teacher list (you can replace with DB fetch)
-  const teachersList = [
-    { id: "t1", name: "Mr. Ahmed" },
-    { id: "t2", name: "Ms. Fatima" },
-    { id: "t3", name: "Sir John" },
-  ];
-
-  const [courses, setCourses] = useState([
-    {
-      id: 1,
-      name: "Web Development",
-      duration: "3 Months",
-      desc: "Learn HTML, CSS, JS, React, and Node.js.",
-      teacher: "Mr. Ahmed",
-    },
-    {
-      id: 2,
-      name: "Python Basics",
-      duration: "2 Months",
-      desc: "Learn Python fundamentals and data handling.",
-      teacher: "Ms. Fatima",
-    },
-  ]);
-
-  const [newCourse, setNewCourse] = useState({
-    name: "",
-    duration: "",
-    desc: "",
-    teacher: "",
-  });
-
+  const [teachersList, setTeachersList] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [editingCourse, setEditingCourse] = useState(null);
 
-  const handleAddCourse = (e) => {
+  const [newCourse, setNewCourse] = useState({
+    title: "",
+    duration: "",
+    description: "",
+    teacherId: "",
+    img: null,
+  });
+
+  // ===================== FETCH TEACHERS =====================
+  const fetchTeachers = async () => {
+    try {
+      const res = await API.get("/teachers/");
+      setTeachersList(res.data);
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // ===================== FETCH COURSES =====================
+  const fetchCourses = async () => {
+    try {
+      const res = await API.get("/courses/");
+      setCourses(res.data.data);
+      console.log(res.data.data);
+    } catch (error) {
+      console.error("Fetch error:", error);
+      alert("Error fetching courses");
+    }
+  };
+
+  useEffect(() => {
+    fetchTeachers();
+    fetchCourses();
+  }, []);
+
+  // ===================== ADD COURSE =====================
+  const handleAddCourse = async (e) => {
     e.preventDefault();
-    if (!newCourse.name || !newCourse.duration || !newCourse.teacher)
-      return alert("Please fill in all fields.");
+    if (!newCourse.title || !newCourse.duration || !newCourse.teacherId)
+      return alert("Please fill all required fields");
 
-    const newEntry = { id: Date.now(), ...newCourse };
-    setCourses([...courses, newEntry]);
-    setNewCourse({ name: "", duration: "", desc: "", teacher: "" });
+    try {
+      const formData = new FormData();
+      formData.append("title", newCourse.title);
+      formData.append("duration", newCourse.duration);
+      formData.append("description", newCourse.description);
+      formData.append("teacherId", newCourse.teacherId);
+
+      if (newCourse.img) formData.append("img", newCourse.img);
+
+      const res = await API.post("/courses/addCourse", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      setCourses([...courses, res.data.data]);
+
+      setNewCourse({
+        title: "",
+        duration: "",
+        description: "",
+        teacherId: "",
+        img: null,
+      });
+    } catch (error) {
+      console.error("Add error:", error);
+      alert("Failed to add course");
+    }
   };
 
-  const handleDelete = (id) => {
-    setCourses(courses.filter((course) => course.id !== id));
+  // ===================== DELETE COURSE =====================
+  const handleDelete = async (id) => {
+    try {
+      await API.delete(`/courses/deleteCourse/${id}`);
+      setCourses(courses.filter((c) => c._id !== id));
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("Failed to delete course");
+    }
   };
 
+  // ===================== EDIT COURSE =====================
   const handleEdit = (course) => {
     setEditingCourse(course);
-    setNewCourse(course);
+    setNewCourse({
+      title: course.title,
+      duration: course.duration,
+      description: course.description,
+      teacherId: course.teacherId._id || course.teacherId, // ensure correct value
+      img: null,
+    });
   };
 
-  const handleUpdateCourse = (e) => {
+  // ===================== UPDATE COURSE =====================
+  const handleUpdateCourse = async (e) => {
     e.preventDefault();
-    setCourses(
-      courses.map((course) =>
-        course.id === editingCourse.id ? { ...course, ...newCourse } : course
-      )
-    );
-    setEditingCourse(null);
-    setNewCourse({ name: "", duration: "", desc: "", teacher: "" });
+    if (!newCourse.title || !newCourse.duration || !newCourse.teacherId)
+      return alert("Please fill all required fields");
+
+    try {
+      const formData = new FormData();
+      formData.append("title", newCourse.title);
+      formData.append("duration", newCourse.duration);
+      formData.append("description", newCourse.description);
+      formData.append("teacherId", newCourse.teacherId); // ✅ fixed
+
+      if (newCourse.img) formData.append("img", newCourse.img);
+
+      const res = await API.put(
+        `/courses/updateCourse/${editingCourse._id}`,
+        formData
+      );
+
+      setCourses(
+        courses.map((c) =>
+          c._id === editingCourse._id ? res.data.data : c
+        )
+      );
+
+      setEditingCourse(null);
+      setNewCourse({
+        title: "",
+        duration: "",
+        description: "",
+        teacherId: "",
+        img: null,
+      });
+    } catch (error) {
+      console.error("Update error:", error);
+      alert("Failed to update course");
+    }
   };
 
   return (
     <div className="p-6 bg-gray-900 min-h-screen text-white flex flex-col items-center">
-      <motion.h1
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        className="text-3xl font-bold mb-6 flex items-center gap-2"
-      >
-        📚 Manage Courses
-      </motion.h1>
+      <h1 className="text-3xl font-bold mb-6">📚 Manage Courses</h1>
 
-      {/* Add / Edit Course Form */}
-      <motion.form
+      {/* FORM */}
+      <form
         onSubmit={editingCourse ? handleUpdateCourse : handleAddCourse}
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5 }}
         className="bg-gray-800 p-6 rounded-2xl shadow-lg w-full max-w-2xl mb-8"
       >
         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
@@ -101,16 +165,16 @@ const CourseManager = () => {
           <input
             type="text"
             placeholder="Course Name"
-            className="p-2 rounded bg-gray-700 focus:outline-none w-full"
-            value={newCourse.name}
+            className="p-2 rounded bg-gray-700"
+            value={newCourse.title}
             onChange={(e) =>
-              setNewCourse({ ...newCourse, name: e.target.value })
+              setNewCourse({ ...newCourse, title: e.target.value })
             }
           />
           <input
             type="text"
-            placeholder="Duration (e.g. 3 Months)"
-            className="p-2 rounded bg-gray-700 focus:outline-none w-full"
+            placeholder="Duration"
+            className="p-2 rounded bg-gray-700"
             value={newCourse.duration}
             onChange={(e) =>
               setNewCourse({ ...newCourse, duration: e.target.value })
@@ -118,94 +182,87 @@ const CourseManager = () => {
           />
         </div>
 
-        {/* Dropdown for Teachers */}
+        {/* TEACHER SELECT */}
         <select
-          className="p-2 rounded bg-gray-700 focus:outline-none w-full mt-4"
-          value={newCourse.teacher}
+          className="p-2 rounded bg-gray-700 w-full mt-4"
+          value={newCourse.teacherId}
           onChange={(e) =>
-            setNewCourse({ ...newCourse, teacher: e.target.value })
+            setNewCourse({ ...newCourse, teacherId: e.target.value })
           }
         >
           <option value="">Select Teacher</option>
           {teachersList.map((t) => (
-            <option key={t.id} value={t.name}>
-              {t.name}
+            <option key={t._id} value={t._id}>
+              {t.fullname}
             </option>
           ))}
         </select>
 
+        {/* DESCRIPTION */}
         <textarea
-          placeholder="Course Description"
-          className="p-2 rounded bg-gray-700 focus:outline-none w-full mt-4"
-          value={newCourse.desc}
-          onChange={(e) => setNewCourse({ ...newCourse, desc: e.target.value })}
+          className="p-2 rounded bg-gray-700 w-full mt-4"
+          placeholder="Description"
+          value={newCourse.description}
+          onChange={(e) =>
+            setNewCourse({ ...newCourse, description: e.target.value })
+          }
         ></textarea>
+
+        {/* IMAGE UPLOADER */}
+        <input
+          type="file"
+          className="mt-4"
+          onChange={(e) =>
+            setNewCourse({ ...newCourse, img: e.target.files[0] })
+          }
+        />
 
         <button
           type="submit"
           className={`${
-            editingCourse
-              ? "bg-yellow-500 hover:bg-yellow-600"
-              : "bg-blue-600 hover:bg-blue-700"
-          } px-6 py-2 mt-4 rounded-lg font-semibold transition-all`}
+            editingCourse ? "bg-yellow-500" : "bg-blue-600"
+          } px-6 py-2 mt-4 rounded-lg`}
         >
-          {editingCourse ? (
-            <span className="flex items-center gap-2">
-              <FaCheck /> Update Course
-            </span>
-          ) : (
-            "Add Course"
-          )}
+          {editingCourse ? "Update Course" : "Add Course"}
         </button>
-      </motion.form>
+      </form>
 
-      {/* Course List */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl"
-      >
-        {courses.length === 0 ? (
-          <p className="text-gray-400 text-center w-full">
-            No courses added yet.
-          </p>
-        ) : (
-          courses.map((course) => (
-            <motion.div
-              key={course.id}
-              whileHover={{ scale: 1.03 }}
-              className="bg-gray-800 p-5 rounded-2xl shadow-xl flex flex-col justify-between border border-gray-700"
-            >
-              <div>
-                <h3 className="text-xl font-semibold mb-2 text-blue-400">
-                  {course.name}
-                </h3>
-                <p className="text-gray-400 mb-1">{course.duration}</p>
-                <p className="text-gray-300 text-sm mb-1">
-                  👨‍🏫 {course.teacher}
-                </p>
-                <p className="text-gray-400 text-sm">{course.desc}</p>
-              </div>
+      {/* COURSE CARDS */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+        {courses.map((course) => (
+          <div
+            key={course._id}
+            className="bg-gray-800 p-5 rounded-2xl shadow-xl"
+          >
+            {course.img && (
+              <img
+                src={course.img}
+                className="w-full h-40 object-cover rounded mb-3"
+                alt=""
+              />
+            )}
+            <h3 className="text-xl font-bold text-blue-400">{course.title}</h3>
+            <p>{course.duration}</p>
+            <p>👨‍🏫 {course.teacherId.fullname}</p>
+            <p className="text-gray-400">{course.description}</p>
 
-              <div className="flex justify-end gap-2 mt-4">
-                <button
-                  onClick={() => handleEdit(course)}
-                  className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 px-3 py-1 rounded-lg text-sm"
-                >
-                  <FaEdit /> Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(course.id)}
-                  className="flex items-center gap-2 bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg text-sm"
-                >
-                  <FaTrash /> Delete
-                </button>
-              </div>
-            </motion.div>
-          ))
-        )}
-      </motion.div>
+            <div className="flex justify-between mt-4">
+              <button
+                onClick={() => handleEdit(course)}
+                className="bg-yellow-500 px-3 py-1 rounded"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(course._id)}
+                className="bg-red-600 px-3 py-1 rounded"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

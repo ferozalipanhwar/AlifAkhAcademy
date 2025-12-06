@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import { FaBlog, FaBook, FaChalkboardTeacher, FaEnvelope, FaUser, FaUserGraduate } from "react-icons/fa";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
@@ -15,6 +16,27 @@ const menuItems = [
 
 
 const AdminDashboard = () => {
+   const user = JSON.parse(localStorage.getItem("user"));
+
+
+
+  const isAdmin = user?.isAdmin === true;
+
+  useEffect((
+    () => {
+      //if isAdmin false back home scree
+      if (!isAdmin) {
+        window.location.href = "/";
+      }
+    }
+  ),[])
+
+    const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/";
+  };
+
+
   const location = useLocation();
   const active = location.pathname.split("/").pop();
 
@@ -28,9 +50,9 @@ const AdminDashboard = () => {
   <div className="ml-auto flex items-center gap-2">
     <a href="/AlifAkhAcademy/" className="text-xl hover:text-blue-400">🏠</a>
     <span className="text-xl">👤</span>
-    <span className="text-sm text-gray-400">Feroz Ali</span>
+    <span className="text-sm text-gray-400">{user.name}</span>
     <div className="group relative">
-      <button className="ml-2 px-3 py-1 bg-red-600 rounded-md hover:bg-red-700 focus:outline-none">
+      <button onClick={()=>handleLogout()}  className="ml-2 px-3 py-1 bg-red-600 rounded-md hover:bg-red-700 focus:outline-none">
         Logout
       </button>
     </div>
