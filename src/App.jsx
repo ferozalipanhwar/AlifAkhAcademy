@@ -2,9 +2,11 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import './App.css'
 import AboutUs from './components/About/AboutUs'
+import AdminStastics from './components/Admin/Courses/AdminStastics'
 import Blogs from './components/Admin/Courses/Blogs'
 import Contacts from './components/Admin/Courses/Contacts'
 import CourseManager from './components/Admin/Courses/CourseManager'
+import Settings from './components/Admin/Courses/Settings'
 import Students from './components/Admin/Courses/Students'
 import Teachers from './components/Admin/Courses/Teachers'
 import UsersList from './components/Admin/Courses/UsersList'
@@ -59,6 +61,7 @@ function App() {
           <Route path="/blog/:id" element={<BlogDetail />} /> 
           
              <Route path="/admin-dashboard" element={<AdminDashboard />}>
+                  <Route index element={<AdminStastics />} />
                  <Route path='courses' element={<CourseManager/>}/>
                  <Route path='teachers' element={<Teachers/>}/>
                  <Route path='students' element={<Students/>} />
@@ -66,6 +69,7 @@ function App() {
                  <Route path='blogs' element={<Blogs/>} />
                  <Route path='users' element={<UsersList/>} />
                  <Route path='*' element={<PageNotFOund/>} />
+                 <Route path='settings' element={<Settings/>}/>
           
             </Route>
           <Route path="*" element={<PageNotFOund/>} />

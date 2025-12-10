@@ -1,29 +1,70 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlus, FaTrashAlt, FaUserEdit, FaUserGraduate } from "react-icons/fa";
+import API from "../../../apiHelper/api";
 
 const Students = () => {
-  const [students, setStudents] = useState([
-    { id: 1, name: "Ayesha Khan", course: "Web Development", email: "ayesha@example.com" },
-    { id: 2, name: "Bilal Ahmed", course: "Python Basics", email: "bilal@example.com" },
-  ]);
+  const [students, setStudents] = useState([]);
+  const [courses, setCourses] = useState([]);
 
-  const [newStudent, setNewStudent] = useState({ name: "", course: "", email: "" });
+  const [newStudent, setNewStudent] = useState({
+    fullname: "",
+    email: "",
+    courseId: "",
+  });
 
-  const handleAddStudent = () => {
-    if (newStudent.name && newStudent.course && newStudent.email) {
-      setStudents([
-        ...students,
-        { id: Date.now(), name: newStudent.name, course: newStudent.course, email: newStudent.email },
-      ]);
-      setNewStudent({ name: "", course: "", email: "" });
-    } else {
-      alert("Please fill out all fields!");
+  // Fetch Students
+  const fetchStudents = async () => {
+    try {
+      const { data } = await API.get("/students/");
+      setStudents(data);
+      console.log("Students Data:", data);
+    
+    } catch (err) {
+      console.log("Fetch Error:", err);
     }
   };
 
-  const handleDeleteStudent = (id) => {
-    setStudents(students.filter((student) => student.id !== id));
+  // Fetch Courses
+  const fetchCourses = async () => {
+    try {
+      const { data } = await API.get("/courses/");
+      setCourses(data.data);
+      
+    } catch (err) {
+      console.log("Courses Error:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchStudents();
+    fetchCourses();
+  }, []);
+
+  // Add Student
+  const handleAddStudent = async () => {
+    if (!newStudent.fullname || !newStudent.email || !newStudent.courseId) {
+      alert("All fields required!");
+      return;
+    }
+
+    try {
+      await API.post("/students/add", newStudent);
+      fetchStudents();
+      setNewStudent({ fullname: "", email: "", courseId: "" });
+    } catch (err) {
+      console.log("Add Error:", err);
+    }
+  };
+
+  // Delete
+  const handleDeleteStudent = async (id) => {
+    try {
+      await API.delete(`/students/${id}`);
+      fetchStudents();
+    } catch (err) {
+      console.log("Delete Error:", err);
+    }
   };
 
   return (
@@ -38,88 +79,87 @@ const Students = () => {
       </h2>
 
       {/* Add Student Form */}
-      <motion.div
-        className="flex flex-col md:flex-row gap-4 mb-6"
-        initial={{ scale: 0.9 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.4 }}
-      >
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
         <input
           type="text"
           placeholder="Full Name"
-          className="flex-1 px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:ring-2 focus:ring-blue-500"
-          value={newStudent.name}
-          onChange={(e) => setNewStudent({ ...newStudent, name: e.target.value })}
+          className="px-4 py-2 rounded bg-gray-700"
+          value={newStudent.fullname}
+          onChange={(e) =>
+            setNewStudent({ ...newStudent, fullname: e.target.value })
+          }
         />
-        <input
-          type="text"
-          placeholder="Course Name"
-          className="flex-1 px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:ring-2 focus:ring-blue-500"
-          value={newStudent.course}
-          onChange={(e) => setNewStudent({ ...newStudent, course: e.target.value })}
-        />
+
         <input
           type="email"
-          placeholder="Email Address"
-          className="flex-1 px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:ring-2 focus:ring-blue-500"
+          placeholder="Email"
+          className="px-4 py-2 rounded bg-gray-700"
           value={newStudent.email}
-          onChange={(e) => setNewStudent({ ...newStudent, email: e.target.value })}
+          onChange={(e) =>
+            setNewStudent({ ...newStudent, email: e.target.value })
+          }
         />
+
+        <select
+          className="px-4 py-2 rounded bg-gray-700"
+          value={newStudent.courseId}
+          onChange={(e) =>
+            setNewStudent({ ...newStudent, courseId: e.target.value })
+          }
+        >
+          <option value="">Select Course</option>
+          {courses.map((course) => (
+            <option key={course._id} value={course._id}>
+              {course.title}
+            </option>
+          ))}
+        </select>
+
         <button
           onClick={handleAddStudent}
-          className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg flex items-center gap-2 transition-all"
+          className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded flex items-center gap-2"
         >
           <FaPlus /> Add
         </button>
-      </motion.div>
+      </div>
 
       {/* Students Table */}
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
+        <table className="w-full text-left">
           <thead>
-            <tr className="bg-gray-700 text-left">
+            <tr className="bg-gray-700">
               <th className="p-3">#</th>
               <th className="p-3">Name</th>
               <th className="p-3">Course</th>
               <th className="p-3">Email</th>
-              <th className="p-3 text-center">Actions</th>
+              <th className="p-3">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {students.map((student, index) => (
-              <motion.tr
-                key={student.id}
-                className="border-b border-gray-700 hover:bg-gray-700 transition-all"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-              >
-                <td className="p-3">{index + 1}</td>
+            {students.map((s, i) => (
+              <tr key={s._id} className="border-b border-gray-700">
+                <td className="p-3">{i + 1}</td>
                 <td className="p-3 flex items-center gap-2">
-                  <FaUserGraduate className="text-blue-400" /> {student.name}
+                  <FaUserGraduate className="text-blue-400" /> {s.fullname}
                 </td>
-                <td className="p-3">{student.course}</td>
-                <td className="p-3 text-gray-300">{student.email}</td>
-                <td className="p-3 text-center flex justify-center gap-4">
-                  <button className="text-yellow-400 hover:text-yellow-300">
+                <td className="p-3">{s.courseId?.title}</td>
+                <td className="p-3">{s.email}</td>
+                <td className="p-3 flex gap-4">
+                  <button className="text-yellow-400">
                     <FaUserEdit />
                   </button>
                   <button
-                    onClick={() => handleDeleteStudent(student.id)}
-                    className="text-red-500 hover:text-red-400"
+                    onClick={() => handleDeleteStudent(s._id)}
+                    className="text-red-500"
                   >
                     <FaTrashAlt />
                   </button>
                 </td>
-              </motion.tr>
+              </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      {students.length === 0 && (
-        <p className="text-center text-gray-400 mt-6">No students added yet.</p>
-      )}
     </motion.div>
   );
 };

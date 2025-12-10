@@ -1,16 +1,31 @@
 import { LogOut, Menu, User, X } from "lucide-react";
 import { useState } from "react";
-import ListItem from "./ListItem";
+
+const ListItem = ({ title, href }) => {
+  return (
+    <ul className="flex items-center gap-3">
+      <li className="font-semibold">
+        <a
+          href={href || `#${title.replace(/\s+/g, "")}`}
+          className="hover:border-b-2 hover:text-emerald-500 hover:pb-1 transition-all"
+        >
+          {title}
+        </a>
+      </li>
+    </ul>
+  );
+};
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [testPrepOpen, setTestPrepOpen] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("authToken");
   const isLoggedIn = !!token;
 
-  const isAdmin = user?.isAdmin === true; 
+  const isAdmin = user?.isAdmin === true;
 
   const handleLogout = () => {
     localStorage.clear();
@@ -18,7 +33,6 @@ export default function Navbar() {
   };
 
   return (
-  
     <nav className="w-full fixed bg-black px-5 md:px-20 py-5 flex items-center justify-between text-white z-50">
       {/* Logo */}
       <div className="flex items-center gap-2">
@@ -29,12 +43,26 @@ export default function Navbar() {
       </div>
 
       {/* Desktop Menu */}
-      <div className="hidden md:flex items-center gap-5">
+      <div className="hidden md:flex items-center gap-5 relative">
         <ListItem title="Home" />
         <ListItem title="Courses" />
         <ListItem title="Teachers" />
         <ListItem title="About Us" />
         <ListItem title="Contact" />
+
+        {/* Test Prep Dropdown */}
+        <div className="relative group">
+          <button className="font-semibold hover:text-emerald-500 transition-all">
+            Test Prep ▾
+          </button>
+          <div className="absolute top-full left-0 hidden group-hover:block bg-white text-black rounded-lg shadow-lg w-48 mt-2 z-50">
+            <a href="/take-test" className="block px-4 py-2 hover:bg-gray-100">📝 Take Test</a>
+            <a href="/prep-test" className="block px-4 py-2 hover:bg-gray-100">📚 Preparation Test</a>
+            <a href="/prepare/sts" className="block px-4 py-2 hover:bg-gray-100">🎯 STS</a>
+            <a href="/prepare/spsc" className="block px-4 py-2 hover:bg-gray-100">🏛️ SPSC</a>
+            <a href="/prepare/fpsc" className="block px-4 py-2 hover:bg-gray-100">🦅 FPSC</a>
+          </div>
+        </div>
       </div>
 
       {/* Desktop Right Section */}
@@ -42,11 +70,8 @@ export default function Navbar() {
         {!isLoggedIn ? (
           <>
             <a href="/AlifAkhAcademy/login">
-              <button className="me-7 cursor-pointer hover:text-green-500">
-                Login
-              </button>
+              <button className="me-7 cursor-pointer hover:text-green-500">Login</button>
             </a>
-
             <a href="/AlifAkhAcademy/register">
               <button className="bg-emerald-500 px-5 py-2 rounded-full hover:bg-emerald-600 duration-300">
                 Register
@@ -55,7 +80,6 @@ export default function Navbar() {
           </>
         ) : (
           <div className="relative">
-            {/* User Icon */}
             <button
               onClick={() => setProfileOpen(!profileOpen)}
               className="flex items-center gap-2 cursor-pointer hover:text-green-400"
@@ -64,10 +88,8 @@ export default function Navbar() {
               <span className="font-medium">{user?.name}</span>
             </button>
 
-            {/* Profile Dropdown */}
             {profileOpen && (
-              <div className="absolute right-0 mt-3 bg-white text-black rounded-xl shadow-lg w-48 py-3">
-
+              <div className="absolute right-0 mt-3 bg-white text-black rounded-xl shadow-lg w-48 py-3 z-50">
                 {isAdmin && (
                   <a
                     href="/AlifAkhAcademy/admin-dashboard"
@@ -76,15 +98,9 @@ export default function Navbar() {
                     🛠️ Admin Dashboard
                   </a>
                 )}
-                <a
-                  href="profile"
-                  className="block px-4 py-2 hover:bg-gray-100"
-                >
+                <a href="/profile" className="block px-4 py-2 hover:bg-gray-100">
                   👤 Profile
                 </a>
-
-                
-
                 <button
                   onClick={handleLogout}
                   className="w-full text-left px-4 py-2 flex items-center gap-2 hover:bg-red-100"
@@ -106,12 +122,31 @@ export default function Navbar() {
 
       {/* Mobile Dropdown */}
       {isOpen && (
-        <div className="absolute top-16 left-0 w-full bg-black flex flex-col items-center gap-5 py-5 md:hidden">
+        <div className="absolute top-16 left-0 w-full bg-black flex flex-col items-center gap-5 py-5 md:hidden z-50">
           <ListItem title="Home" />
           <ListItem title="Courses" />
           <ListItem title="Teachers" />
           <ListItem title="About Us" />
           <ListItem title="Contact" />
+
+          {/* Test Prep Mobile */}
+          <div className="w-full px-10">
+            <button
+              onClick={() => setTestPrepOpen(!testPrepOpen)}
+              className="w-full border py-2 rounded text-left"
+            >
+              Test Prep ▾
+            </button>
+            {testPrepOpen && (
+              <div className="flex flex-col mt-2 gap-2 px-4 text-white">
+                <a href="/take-test" className="hover:text-emerald-400">📝 Take Test</a>
+                <a href="/prep-test" className="hover:text-emerald-400">📚 Preparation Test</a>
+                <a href="/prepare/sts" className="hover:text-emerald-400">🎯 STS</a>
+                <a href="/prepare/spsc" className="hover:text-emerald-400">🏛️ SPSC</a>
+                <a href="/prepare/fpsc" className="hover:text-emerald-400">🦅 FPSC</a>
+              </div>
+            )}
+          </div>
 
           {/* Mobile login/register OR profile */}
           {!isLoggedIn ? (
@@ -119,7 +154,6 @@ export default function Navbar() {
               <a href="/AlifAkhAcademy/login">
                 <button className="w-full border py-2 rounded">Login</button>
               </a>
-
               <a href="/AlifAkhAcademy/register">
                 <button className="w-full bg-emerald-500 px-5 py-2 rounded-full hover:bg-emerald-600 duration-300">
                   Register
@@ -129,25 +163,16 @@ export default function Navbar() {
           ) : (
             <div className="flex flex-col gap-3 w-full px-10 text-white">
               {isAdmin && (
-                  <a
-                    href="/AlifAkhAcademy/admin-dashboard"
-                   
-                  >
-                    <button className="w-full border py-2 rounded"> Admin Dashboard</button>
-                
-                  </a>
+                <a href="/AlifAkhAcademy/admin-dashboard">
+                  <button className="w-full border py-2 rounded"> Admin Dashboard</button>
+                </a>
               )}
-
-              <a href="profile">
+              <a href="/profile">
                 <button className="w-full border py-2 rounded">Profile</button>
               </a>
-
               <a href="/my-courses">
-                <button className="w-full border py-2 rounded">
-                  My Courses
-                </button>
+                <button className="w-full border py-2 rounded">My Courses</button>
               </a>
-
               <button
                 onClick={handleLogout}
                 className="w-full bg-red-500 py-2 rounded"

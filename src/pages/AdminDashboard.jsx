@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaBlog, FaBook, FaChalkboardTeacher, FaEnvelope, FaUser, FaUserGraduate } from "react-icons/fa";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import API from "../apiHelper/api";
 
 const menuItems = [
   { id: "courses", name: "Courses", icon: <FaBook />, emoji: "📚" },
@@ -11,53 +12,71 @@ const menuItems = [
   { id: "contacts", name: "Contacts", icon: <FaEnvelope />, emoji: "💬" },
   { id: "blogs", name: "Blogs", icon: <FaBlog />, emoji: "📝" },
   { id: "settings", name: "Settings", icon: <FaUser />, emoji: "⚙️" },
-  
 ];
 
-
 const AdminDashboard = () => {
-   const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+  const location = useLocation();
 
+  const [loading, setLoading] = useState(true);     
+  const [isAdmin, setIsAdmin] = useState(false);    
 
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  const isAdmin = user?.isAdmin === true;
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const res = await API.get(`/user/${user?._id}`);
+        const updatedUser = res.data;
 
-  useEffect((
-    () => {
-      //if isAdmin false back home scree
-      if (!isAdmin) {
-        window.location.href = "/";
+        if (!updatedUser?.isAdmin) {
+          navigate("/", { replace: true });
+          return;
+        }
+
+        setIsAdmin(true);
+        setLoading(false);
+      } catch (error) {
+        navigate("/", { replace: true });
       }
-    }
-  ),[])
+    };
 
-    const handleLogout = () => {
+    if (!user) {
+      navigate("/", { replace: true });
+      return;
+    }
+
+    fetchUserData();
+  }, [navigate, user]);
+
+  const handleLogout = () => {
     localStorage.clear();
-    window.location.href = "/";
+    navigate("/", { replace: true });  
   };
 
-
-  const location = useLocation();
   const active = location.pathname.split("/").pop();
+
+ 
+  if (loading || !isAdmin) return null;
 
   return (
     <div className="flex min-h-screen bg-gray-900 text-white">
+      {/* Header */}
+      <header className="w-full bg-gray-800 px-5 py-4 flex items-center text-white fixed top-0 z-50 shadow-md">
+        <h1 className="text-2xl font-bold">Alif Akh Academy</h1>
 
-     <header className="w-full bg-gray-800 px-5 py-4 flex items-center text-white fixed top-0 z-50 shadow-md">
-  <h1 className="text-2xl font-bold">Alif Akh Academy</h1>
-
-  {/* Admin controls */}
-  <div className="ml-auto flex items-center gap-2">
-    <a href="/AlifAkhAcademy/" className="text-xl hover:text-blue-400">🏠</a>
-    <span className="text-xl">👤</span>
-    <span className="text-sm text-gray-400">{user.name}</span>
-    <div className="group relative">
-      <button onClick={()=>handleLogout()}  className="ml-2 px-3 py-1 bg-red-600 rounded-md hover:bg-red-700 focus:outline-none">
-        Logout
-      </button>
-    </div>
-  </div>
-</header>
+        <div className="ml-auto flex items-center gap-2">
+          <Link to="/" className="text-xl hover:text-blue-400">🏠</Link>
+          <span className="text-xl">👤</span>
+          <span className="text-sm text-gray-400">{user?.name}</span>
+          <button
+            onClick={handleLogout}
+            className="ml-2 px-3 py-1 bg-red-600 rounded-md hover:bg-red-700"
+          >
+            Logout
+          </button>
+        </div>
+      </header>
 
       {/* Sidebar */}
       <motion.div
@@ -66,34 +85,33 @@ const AdminDashboard = () => {
         transition={{ duration: 0.6, type: "spring" }}
         className="w-64 bg-gray-800 p-4 hidden md:flex flex-col justify-between shadow-lg"
       >
-        <div>
-         
-          <ul className="space-y-4 mt-16">
-            {menuItems.map((item) => (
-              <li key={item.id}>
-                <Link
-                  to={`/admin-dashboard/${item.id}`}
-                  className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-all ${
-                    active === item.id ? "bg-blue-600" : "hover:bg-gray-700"
-                  }`}
-                >
-                  <span className="text-xl">{item.emoji}</span>
-                  <span>{item.name}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul className="space-y-4 mt-16">
+          {menuItems.map((item) => (
+            <li key={item.id}>
+              <Link
+                to={`/admin-dashboard/${item.id}`}
+                className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-all ${
+                  active === item.id ? "bg-blue-600" : "hover:bg-gray-700"
+                }`}
+              >
+                <span className="text-xl">{item.emoji}</span>
+                <span>{item.name}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
         <p className="text-center text-gray-400 text-sm">
           © 2025 Feroz Admin Dashboard
         </p>
       </motion.div>
 
       {/* Main Content */}
-      <div className="flex-1 p-6 mt-10 overflow-y-auto">
-        <Outlet /> {/*  Nested routes content renders here */}
+      <div className="flex-1 p-6 mt-16 overflow-y-auto">
+        <Outlet />
       </div>
-      {/*mobile view */}
+
+      {/* Mobile Nav */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-800 flex justify-around p-3 shadow-lg">
         {menuItems.map((item) => (
           <Link
@@ -107,9 +125,7 @@ const AdminDashboard = () => {
             <span>{item.name}</span>
           </Link>
         ))}
-      </div>    
-
-
+      </div>
     </div>
   );
 };
