@@ -55,12 +55,10 @@ export default function Navbar() {
           <button className="font-semibold hover:text-emerald-500 transition-all">
             Test Prep ▾
           </button>
-          <div className="absolute top-full left-0 hidden group-hover:block bg-white text-black rounded-lg shadow-lg w-48 mt-2 z-50">
-            <a href="/take-test" className="block px-4 py-2 hover:bg-gray-100">📝 Take Test</a>
-            <a href="/prep-test" className="block px-4 py-2 hover:bg-gray-100">📚 Preparation Test</a>
-            <a href="/prepare/sts" className="block px-4 py-2 hover:bg-gray-100">🎯 STS</a>
-            <a href="/prepare/spsc" className="block px-4 py-2 hover:bg-gray-100">🏛️ SPSC</a>
-            <a href="/prepare/fpsc" className="block px-4 py-2 hover:bg-gray-100">🦅 FPSC</a>
+          <div className="absolute top-full left-0 hidden group-hover:block bg-white text-black rounded-lg shadow-lg w-48 mt-0 z-50">
+            <a href="/AlifAkhAcademy/take-test" className="block px-4 py-2 hover:bg-gray-100">Take Test</a>
+            <a href="/AlifAkhAcademy/prep-test" className="block px-4 py-2 hover:bg-gray-100">Preparation Test</a>
+        
           </div>
         </div>
       </div>
@@ -133,17 +131,16 @@ export default function Navbar() {
           <div className="w-full px-10">
             <button
               onClick={() => setTestPrepOpen(!testPrepOpen)}
-              className="w-full border py-2 rounded text-left"
+              className="w-full  py-2 rounded "
             >
               Test Prep ▾
             </button>
+            
             {testPrepOpen && (
-              <div className="flex flex-col mt-2 gap-2 px-4 text-white">
-                <a href="/take-test" className="hover:text-emerald-400">📝 Take Test</a>
-                <a href="/prep-test" className="hover:text-emerald-400">📚 Preparation Test</a>
-                <a href="/prepare/sts" className="hover:text-emerald-400">🎯 STS</a>
-                <a href="/prepare/spsc" className="hover:text-emerald-400">🏛️ SPSC</a>
-                <a href="/prepare/fpsc" className="hover:text-emerald-400">🦅 FPSC</a>
+              <div className="flex flex-col text-center   mt-2 gap-2 px-4 text-white bg-gray-700 rounded-lg py-3 ">
+                <a href="/AlifAkhAcademy/take-test" className="hover:text-emerald-400"> Take Test</a>
+                <a href="/AlifAkhAcademy/prep-test" className="hover:text-emerald-400">Preparation Test</a>
+              
               </div>
             )}
           </div>

@@ -28,6 +28,7 @@ import AdminDashboard from './pages/AdminDashboard'
 import BlogDetail from './pages/BlogDetail'
 import CourseRegister from './pages/CourseRegister'
 import Profile from './pages/Profile'
+import TakeTest from './pages/TakeTest/TakeTest'
 
 function App() {
   return (
@@ -56,6 +57,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/take-test" element={<TakeTest />} />
+          <Route path="/prep-test" element={<Profile />} />
           <Route path="/course-register" element={<><CourseRoadmap/><CourseRegister /> </>} />
           <Route path="/blogs" element={<BlogSection />} />
           <Route path="/blog/:id" element={<BlogDetail />} /> 
