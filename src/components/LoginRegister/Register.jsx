@@ -1,29 +1,29 @@
+import { Lock, Mail, User, UserPlus } from "lucide-react";
 import { useState } from "react";
-import { Lock, Mail, User } from "lucide-react";
+import API from "../../apiHelper/api.js"; // ✅ axios instance
+
 const getMessageStyles = (type) => {
   switch (type) {
-    case 'success':
+    case "success":
       return {
-        bgColor: 'bg-green-100',
-        textColor: 'text-green-700',
-        borderColor: 'border-green-400',
+        bgColor: "bg-green-100",
+        textColor: "text-green-700",
+        borderColor: "border-green-400",
       };
-    case 'error':
+    case "error":
       return {
-        bgColor: 'bg-red-100',
-        textColor: 'text-red-700',
-        borderColor: 'border-red-400',
+        bgColor: "bg-red-100",
+        textColor: "text-red-700",
+        borderColor: "border-red-400",
       };
-    case 'info':
     default:
       return {
-        bgColor: 'bg-blue-100',
-        textColor: 'text-blue-700',
-        borderColor: 'border-blue-400',
+        bgColor: "bg-blue-100",
+        textColor: "text-blue-700",
+        borderColor: "border-blue-400",
       };
   }
 };
-
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -35,58 +35,42 @@ const Register = () => {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
-  const [messageType, setMessageType] = useState('info'); 
+  const [messageType, setMessageType] = useState("info");
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    if (loading) return;
 
     if (formData.password !== formData.confirmPassword) {
-      setMessageType('error');
+      setMessageType("error");
       return setMessage("❌ Passwords do not match!");
     }
 
     setLoading(true);
     setMessage("");
-    setMessageType('info'); // Set to 'info' while loading/processing
+    setMessageType("info");
 
     try {
-     
-      const res = await fetch("http://localhost:5000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }),
+      await API.post("/auth/register", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
       });
 
-      const data = await res.json();
-      console.log(data);
+      setMessageType("success");
+      setMessage("✅ Account created! Redirecting to login...");
 
-      if (res.ok) {
-    
-        setMessageType('success');
-        setMessage("✅ Registration successful!");
-        setFormData({ name: "", email: "", password: "", confirmPassword: "" }); // Clear form on success
-      } else {
-       
-        setMessageType('error');
-        setMessage(`❌ ${data.message || "Something went wrong!"}`);
-      }
-    }
-    catch (error) {
-
-      console.error(error);
-      setMessageType('error');
-      setMessage("❌ Server error, please try again!");
+      setTimeout(() => {
+        window.location.href = "/AlifAkhAcademy/login";
+      }, 1500);
+    } catch (error) {
+      setMessageType("error");
+      setMessage(
+        `❌ ${error.response?.data?.message || "Registration failed"}`
+      );
     }
 
     setLoading(false);
@@ -94,91 +78,36 @@ const Register = () => {
 
   const { bgColor, textColor, borderColor } = getMessageStyles(messageType);
 
-
   return (
-    <div
-      className="flex justify-center items-center min-h-screen bg-cover bg-center px-4"
-      style={{
-        backgroundColor: "#e0f2fe",
-      }}
-    >
+    <div className="flex justify-center items-center min-h-screen px-4 bg-sky-100">
       <div className="bg-white/90 backdrop-blur-md shadow-2xl rounded-3xl p-8 w-full max-w-md animate-fadeIn">
-        <h2 className="text-3xl font-bold text-center text-green-700 mb-6">
-          📖 Create Your Account
+        <h2 className="text-3xl font-bold text-center text-green-700 mb-6 flex justify-center items-center">
+          <UserPlus className="mr-3 w-7 h-7" />
+          Create Account
         </h2>
 
         {message && (
-          <p className={`text-center mb-4 font-semibold p-3 rounded-xl border-2 transition-all duration-300 ${borderColor} ${bgColor} ${textColor}`}>
+          <p
+            className={`text-center mb-4 font-semibold p-3 rounded-xl border-2 ${borderColor} ${bgColor} ${textColor}`}
+          >
             {message}
           </p>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Full Name */}
-          <div className="flex items-center border border-gray-300 rounded-lg p-3 focus-within:ring-2 focus-within:ring-green-500 transition-all duration-300">
-            {/* Switched FaUser to User */}
-            <User className="text-green-600 mr-3 w-5 h-5" />
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full bg-transparent outline-none"
-              required
-            />
-          </div>
-
+          {/* Name */}
+          <Input icon={User} name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} />
           {/* Email */}
-          <div className="flex items-center border border-gray-300 rounded-lg p-3 focus-within:ring-2 focus-within:ring-green-500 transition-all duration-300">
-            {/* Switched FaEnvelope to Mail */}
-            <Mail className="text-green-600 mr-3 w-5 h-5" />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full bg-transparent outline-none"
-              required
-            />
-          </div>
-
+          <Input icon={Mail} name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
           {/* Password */}
-          <div className="flex items-center border border-gray-300 rounded-lg p-3 focus-within:ring-2 focus-within:ring-green-500 transition-all duration-300">
-            {/* Switched FaLock to Lock */}
-            <Lock className="text-green-600 mr-3 w-5 h-5" />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full bg-transparent outline-none"
-              required
-            />
-          </div>
+          <Input icon={Lock} name="password" type="password" placeholder="Password" value={formData.password} onChange={handleChange} />
+          {/* Confirm */}
+          <Input icon={Lock} name="confirmPassword" type="password" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} />
 
-          {/* Confirm Password */}
-          <div className="flex items-center border border-gray-300 rounded-lg p-3 focus-within:ring-2 focus-within:ring-green-500 transition-all duration-300">
-            {/* Switched FaLock to Lock */}
-            <Lock className="text-green-600 mr-3 w-5 h-5" />
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="w-full bg-transparent outline-none"
-              required
-            />
-          </div>
-
-          {/* Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg transition-transform duration-300 transform hover:scale-105 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg transition-transform hover:scale-105 disabled:opacity-50"
           >
             {loading ? "⏳ Registering..." : "✨ Register"}
           </button>
@@ -186,10 +115,7 @@ const Register = () => {
 
         <p className="text-center text-sm mt-4">
           Already have an account?{" "}
-          <a
-            href="/AlifAkhAcademy/login"
-            className="text-green-700 font-medium hover:underline"
-          >
+          <a href="/AlifAkhAcademy/login" className="text-green-700 font-medium hover:underline">
             Login
           </a>
         </p>
@@ -197,5 +123,12 @@ const Register = () => {
     </div>
   );
 };
+
+const Input = ({ icon: Icon, ...props }) => (
+  <div className="flex items-center border border-gray-300 rounded-lg p-3 focus-within:ring-2 focus-within:ring-green-500 shadow-sm">
+    <Icon className="text-green-600 mr-3 w-5 h-5" />
+    <input {...props} className="w-full bg-transparent outline-none" required />
+  </div>
+);
 
 export default Register;

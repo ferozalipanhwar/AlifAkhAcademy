@@ -1,6 +1,5 @@
-import axios from "axios";
 import { useState } from "react";
-
+import API from "../../apiHelper/api.js";
 const ContactSection = () => {
   const [form, setForm] = useState({
     name: "",
@@ -23,8 +22,8 @@ const ContactSection = () => {
     setMsg("");
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/contact/send",
+      const res = API.post(
+        "/contact/send",
         form
       );
 

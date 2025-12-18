@@ -73,7 +73,7 @@ if (res.ok) {
 
   setTimeout(() => {
     window.location.href = '/';
-  }, 1500);
+  }, 1000);
 }
  else {
         
