@@ -1,20 +1,19 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import API from "../../apiHelper/api";
 
-const api= "http://localhost:5000/api/teachers";
-const TeachersSlider = () => {
+const TeachersSection = () => {
   const [current, setCurrent] = useState(0);
   const [teachers,setTeachers]=useState([]);
 
  const fetchTeachers=async()=>{
- try {
-  const res=await axios.get(`${api}/`);
-  setTeachers(res.data);
-  console.log(res.data);
- } catch (error) {
-  console.log(error,'not found teachers');
-  
- }
+  try {
+  const res = await API.get("/teachers");
+  console.log("Teachers API response:", res.data, typeof res.data);
+  setTeachers(Array.isArray(res.data) ? res.data : []);
+} catch (error) {
+  console.error("Error fetching teachers:", error);
+}
+
   
  }
  useEffect(()=>{
@@ -39,7 +38,7 @@ const TeachersSlider = () => {
               className="w-24 h-24 object-cover rounded-full mb-4 border-4 border-emerald-500"
             />
             <h3 className="text-lg font-semibold text-gray-800">{teacher.fullname}</h3>
-            <p className="text-emerald-600 text-sm font-medium">{teacher.courseId.title}</p>
+            <p className="text-emerald-600 text-sm font-medium">{teacher.courseId?.title}</p>
           </div>
         ))}
       </div>
@@ -82,4 +81,4 @@ const TeachersSlider = () => {
   );
 };
 
-export default TeachersSlider;
+export default TeachersSection;

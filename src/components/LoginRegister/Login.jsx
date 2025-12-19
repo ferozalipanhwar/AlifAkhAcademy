@@ -1,5 +1,6 @@
 import { Lock, LogIn, Mail } from "lucide-react";
 import { useState } from "react";
+import API from "../../apiHelper/api.js";
 const getMessageStyles = (type) => {
   switch (type) {
     case 'success':
@@ -34,62 +35,54 @@ const Login = () => {
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-   
-    if (loading) return;
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (loading) return;
 
-    setLoading(true);
-    setMessage("");
-    setMessageType('info'); 
+  setLoading(true);
+  setMessage("");
+  setMessageType("info");
 
-    try {
-      
-      const res = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+  try {
+    const res = await API.post("/auth/login", {
+      email: formData.email,
+      password: formData.password,
+    });
 
-      const data = await res.json();
-      console.log("Login Response:", data);
-if (res.ok) {
-  if (data.token) {
-    localStorage.setItem("authToken", data.token);
-  }
+    const data = res.data; // ✅ axios ka data
 
-  if (data.user) {
-    localStorage.setItem("user", JSON.stringify(data.user));
-  }
+    console.log("Login Response:", data);
 
-  setMessageType('success');
-  setMessage("✅ Login successful! Redirecting to home page...");
-
-  setTimeout(() => {
-    window.location.href = '/';
-  }, 1000);
-}
- else {
-        
-        setMessageType('error');
-        setMessage(`❌ ${data.message || "Invalid email or password. Please try again."}`);
-      }
-    }
-    catch (error) {
-      
-      console.error("Fetch Error:", error);
-      setMessageType('error');
-      setMessage("❌ Network error or server unreachable. Please check your connection.");
+    if (data.token) {
+      localStorage.setItem("authToken", data.token);
     }
 
+    if (data.user) {
+      localStorage.setItem("user", JSON.stringify(data.user));
+    }
+
+    setMessageType("success");
+    setMessage("✅ Login successful! Redirecting...");
+
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 1000);
+
+  } catch (error) {
+    console.error("Login Error:", error);
+
+    setMessageType("error");
+    setMessage(
+      `❌ ${
+        error.response?.data?.message ||
+        "Invalid email or password"
+      }`
+    );
+  } finally {
     setLoading(false);
-  };
+  }
+};
+
 
  
   const { bgColor, textColor, borderColor } = getMessageStyles(messageType);

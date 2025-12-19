@@ -1,7 +1,7 @@
-import axios from "axios";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FaEnvelopeOpenText, FaTrashAlt, FaUserCircle } from "react-icons/fa";
+import API from "../../../apiHelper/api.js"; // Axios instance
 
 const Contacts = () => {
   const [contacts, setContacts] = useState([]);
@@ -11,9 +11,8 @@ const Contacts = () => {
   // Fetch all contacts from API
   const fetchContacts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/contact/all");
-      setContacts(res.data.contacts);
-      
+      const res = await API.get("/contact/all");
+      setContacts(Array.isArray(res.data.contacts) ? res.data.contacts : []);
     } catch (err) {
       console.error(err);
       setError("Failed to fetch contact messages.");
@@ -31,7 +30,7 @@ const Contacts = () => {
     if (!window.confirm("Are you sure you want to delete this message?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/contact/${id}`);
+      await API.delete(`/contact/${id}`);
       setContacts(contacts.filter((msg) => msg._id !== id));
     } catch (err) {
       console.error(err);

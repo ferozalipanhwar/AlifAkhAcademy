@@ -1,15 +1,13 @@
-import axios from "axios";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
+import API from "../../../apiHelper/api"; // Axios instance
 
 const BlogManager = () => {
-  const API = "http://localhost:5000/api/blog";
   const token = localStorage.getItem("authToken"); // admin token
 
   const [blogs, setBlogs] = useState([]);
   const [fileInput, setFileInput] = useState(null);
-
   const [newBlog, setNewBlog] = useState({
     title: "",
     content: "",
@@ -20,18 +18,17 @@ const BlogManager = () => {
 
   // 🚀 Load Blogs from Backend
   useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await API.get("/blog");
+        console.log("Blogs fetched:", res.data);
+        setBlogs(Array.isArray(res.data) ? res.data : []);
+      } catch (err) {
+        console.error("Error fetching blogs:", err);
+      }
+    };
     fetchBlogs();
   }, []);
-
-  const fetchBlogs = async () => {
-    try {
-      const res = await axios.get(`${API}/`);
-      setBlogs(res.data);
-  
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   // 📤 Handle Image Upload (Preview + File Save)
   const handleImageUpload = (e) => {
@@ -65,25 +62,18 @@ const BlogManager = () => {
     formData.append("img", fileInput);
 
     try {
-      const res = await axios.post(`${API}/create`, formData, {
+      const res = await API.post("/blog/create", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       alert("✅ Blog added successfully!");
-      setBlogs([...blogs, res.data.blog]);
-
-      setNewBlog({
-        title: "",
-        content: "",
-        author: "",
-        category: "",
-        image: "",
-      });
+      setBlogs([...blogs, res.data]); // Assuming backend returns created blog
+      setNewBlog({ title: "", content: "", author: "", category: "", image: "" });
       setFileInput(null);
     } catch (err) {
-      console.log(err);
+      console.error("Error adding blog:", err);
       alert("❌ Error adding blog");
     }
   };
@@ -91,13 +81,12 @@ const BlogManager = () => {
   // 🗑 Delete Blog
   const handleDeleteBlog = async (id) => {
     try {
-      await axios.delete(`${API}/${id}`, {
+      await API.delete(`/blog/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       setBlogs(blogs.filter((blog) => blog._id !== id));
     } catch (err) {
-      console.log(err);
+      console.error("Error deleting blog:", err);
       alert("❌ Error deleting blog");
     }
   };
@@ -198,46 +187,47 @@ const BlogManager = () => {
           <p className="text-center text-gray-400">No blogs found.</p>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogs.map((blog) => (
-              <motion.div
-                key={blog._id}
-                className="bg-gray-900 rounded-2xl overflow-hidden shadow-md hover:shadow-indigo-500/30 transition"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-              >
-                <img
-                  src={blog.img}
-                  alt={blog.title}
-                  className="w-full h-40 object-cover"
-                />
-                <div className="p-4">
-                  <h3 className="text-lg font-bold text-indigo-400 mb-2">
-                    {blog.title}
-                  </h3>
-                  <p className="text-sm text-gray-400 mb-2">
-                    <span className="font-semibold">Author:</span> {blog.author}
-                  </p>
-                  <p className="text-sm text-gray-400 mb-2">
-                    <span className="font-semibold">Category:</span>{" "}
-                    {blog.category}
-                  </p>
-                  <p className="text-sm text-gray-400 mb-3">
-                    {blog.content.substring(0, 80)}...
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    🕒 {new Date(blog.createdAt).toLocaleString()}
-                  </p>
+            {Array.isArray(blogs) &&
+              blogs.map((blog) => (
+                <motion.div
+                  key={blog._id}
+                  className="bg-gray-900 rounded-2xl overflow-hidden shadow-md hover:shadow-indigo-500/30 transition"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <img
+                    src={blog.img}
+                    alt={blog.title}
+                    className="w-full h-40 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="text-lg font-bold text-indigo-400 mb-2">
+                      {blog.title}
+                    </h3>
+                    <p className="text-sm text-gray-400 mb-2">
+                      <span className="font-semibold">Author:</span> {blog.author}
+                    </p>
+                    <p className="text-sm text-gray-400 mb-2">
+                      <span className="font-semibold">Category:</span>{" "}
+                      {blog.category}
+                    </p>
+                    <p className="text-sm text-gray-400 mb-3">
+                      {blog.content.substring(0, 80)}...
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      🕒 {new Date(blog.createdAt).toLocaleString()}
+                    </p>
 
-                  <button
-                    onClick={() => handleDeleteBlog(blog._id)}
-                    className="mt-3 flex items-center gap-2 bg-red-600 hover:bg-red-500 transition-all px-4 py-2 rounded-lg text-sm font-medium"
-                  >
-                    <FaTrash /> Delete
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+                    <button
+                      onClick={() => handleDeleteBlog(blog._id)}
+                      className="mt-3 flex items-center gap-2 bg-red-600 hover:bg-red-500 transition-all px-4 py-2 rounded-lg text-sm font-medium"
+                    >
+                      <FaTrash /> Delete
+                    </button>
+                  </div>
+                </motion.div>
+              ))}
           </div>
         )}
       </div>
