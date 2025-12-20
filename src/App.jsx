@@ -5,6 +5,7 @@ import AboutUs from './components/About/AboutUs'
 import AdminStastics from './components/Admin/Courses/AdminStastics'
 import Blogs from './components/Admin/Courses/Blogs'
 import Contacts from './components/Admin/Courses/Contacts'
+import CourseEnrollments from './components/Admin/Courses/CourseEnrollments'
 import CourseManager from './components/Admin/Courses/CourseManager'
 import Settings from './components/Admin/Courses/Settings'
 import Students from './components/Admin/Courses/Students'
@@ -70,6 +71,7 @@ function App() {
                  <Route path='students' element={<Students/>} />
                  <Route path='contacts' element={<Contacts/>} />
                  <Route path='blogs' element={<Blogs/>} />
+                 <Route path='course-enrollments' element={<CourseEnrollments/>} />
                  <Route path='users' element={<UsersList/>} />
                  <Route path='*' element={<PageNotFOund/>} />
                  <Route path='settings' element={<Settings/>}/>

@@ -9,6 +9,7 @@ const menuItems = [
   { id: "teachers", name: "Teachers", icon: <FaChalkboardTeacher />, emoji: "👨‍🏫" },
   { id: "students", name: "Students", icon: <FaUserGraduate />, emoji: "🎓" },
   { id: "users", name: "Users", icon: <FaUser />, emoji: "👥" },
+  { id: "course-enrollments", name: "Course Enrollments", icon: <FaUserGraduate />, emoji: "🎓" },
   { id: "contacts", name: "Contacts", icon: <FaEnvelope />, emoji: "💬" },
   { id: "blogs", name: "Blogs", icon: <FaBlog />, emoji: "📝" },
   { id: "settings", name: "Settings", icon: <FaUser />, emoji: "⚙️" },

@@ -1,14 +1,15 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import API from "../apiHelper/api";
 import AlertBox from "../components/UniversalComponents/AlertBox";
 
 const CourseRegister = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
   const { courseId, courseTitle } = location.state || {};
 
-  const user = JSON.parse(localStorage.getItem("user")); // 👈 logged user
+  const [user, setUser] = useState(null);
 
   const [formData, setFormData] = useState({
     fullname: "",
@@ -19,15 +20,25 @@ const CourseRegister = () => {
 
   const [alertData, setAlertData] = useState(null);
 
+  //  Read user ONCE (no infinite loop)
   useEffect(() => {
-    if (user) {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+
       setFormData((prev) => ({
         ...prev,
-        fullname: user.fullname,
-        email: user.email,
+        fullname: parsedUser.name,
+        email: parsedUser.email,
       }));
     }
-  }, [user]);
+  }, []);
+
+  // Redirect if course missing
+  useEffect(() => {
+    if (!courseId) navigate("/");
+  }, [courseId, navigate]);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -36,11 +47,14 @@ const CourseRegister = () => {
     e.preventDefault();
 
     try {
-      await axios.post(
-        "http://localhost:5000/api/enroll",
+      await API.post(
+        "/course-enrollment/enroll",
         {
           courseId,
-          ...formData,
+          fullname: formData.fullname,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          message: formData.message,
         },
         {
           headers: {
@@ -57,24 +71,21 @@ const CourseRegister = () => {
       setTimeout(() => navigate("/"), 2000);
     } catch (error) {
       setAlertData({
-        message: "❌ Enrollment failed",
+        message:
+          error.response?.data?.message || "❌ Enrollment failed",
         type: "error",
       });
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-green-50 to-white px-4">
+    <div className="flex justify-center items-center min-h-screen px-4 bg-gray-50">
       {alertData && (
-        <AlertBox
-          message={alertData.message}
-          type={alertData.type}
-          onClose={() => setAlertData(null)}
-        />
+        <AlertBox {...alertData} onClose={() => setAlertData(null)} />
       )}
 
-      <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-lg">
-        <h2 className="text-3xl font-bold text-center text-green-700 mb-6">
+      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-lg">
+        <h2 className="text-2xl font-bold mb-5 text-center">
           📚 Course Enrollment
         </h2>
 
@@ -82,7 +93,6 @@ const CourseRegister = () => {
           {!user && (
             <>
               <input
-                type="text"
                 name="fullname"
                 placeholder="Full Name"
                 value={formData.fullname}
@@ -92,9 +102,9 @@ const CourseRegister = () => {
               />
 
               <input
-                type="email"
                 name="email"
-                placeholder="Email Address"
+                type="email"
+                placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -104,13 +114,12 @@ const CourseRegister = () => {
           )}
 
           {user && (
-            <div className="bg-green-50 p-3 rounded-lg text-sm text-green-700">
-              Logged in as <b>{user.fullname}</b> ({user.email})
+            <div className="bg-green-50 p-2 rounded text-sm">
+              Logged in as <b>{user.fullname}</b>
             </div>
           )}
 
           <input
-            type="tel"
             name="phoneNumber"
             placeholder="Phone Number"
             value={formData.phoneNumber}
@@ -120,22 +129,20 @@ const CourseRegister = () => {
           />
 
           <input
-            type="text"
-            value={courseTitle}
+            value={courseTitle || "Selected Course"}
             readOnly
-            className="w-full bg-gray-100 border rounded-lg p-3"
+            className="input bg-gray-100"
           />
 
           <textarea
             name="message"
-            placeholder="Any message (optional)"
+            placeholder="Optional message"
             value={formData.message}
             onChange={handleChange}
-            rows="3"
             className="input"
           />
 
-          <button className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg">
+          <button className="w-full bg-green-600 text-white py-3 rounded">
             Submit Enrollment
           </button>
         </form>
