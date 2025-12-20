@@ -56,8 +56,8 @@ export default function Navbar() {
             Test Prep ▾
           </button>
           <div className="absolute top-full left-0 hidden group-hover:block bg-white text-black rounded-lg shadow-lg w-48 mt-0 z-50">
-            <a href="/AlifAkhAcademy/take-test" className="block px-4 py-2 hover:bg-gray-100">Take Test</a>
-            <a href="/AlifAkhAcademy/prep-test" className="block px-4 py-2 hover:bg-gray-100">Preparation Test</a>
+            <a href="/take-test" className="block px-4 py-2 hover:bg-gray-100">Take Test</a>
+            <a href="/prep-test" className="block px-4 py-2 hover:bg-gray-100">Preparation Test</a>
         
           </div>
         </div>
@@ -67,10 +67,10 @@ export default function Navbar() {
       <div className="hidden md:flex items-center gap-5">
         {!isLoggedIn ? (
           <>
-            <a href="/AlifAkhAcademy/login">
+            <a href="/login">
               <button className="me-7 cursor-pointer hover:text-green-500">Login</button>
             </a>
-            <a href="/AlifAkhAcademy/register">
+            <a href="/register">
               <button className="bg-emerald-500 px-5 py-2 rounded-full hover:bg-emerald-600 duration-300">
                 Register
               </button>
@@ -138,8 +138,8 @@ export default function Navbar() {
             
             {testPrepOpen && (
               <div className="flex flex-col text-center   mt-2 gap-2 px-4 text-white bg-gray-700 rounded-lg py-3 ">
-                <a href="/AlifAkhAcademy/take-test" className="hover:text-emerald-400"> Take Test</a>
-                <a href="/AlifAkhAcademy/prep-test" className="hover:text-emerald-400">Preparation Test</a>
+                <a href="/take-test" className="hover:text-emerald-400"> Take Test</a>
+                <a href="/prep-test" className="hover:text-emerald-400">Preparation Test</a>
               
               </div>
             )}
@@ -148,10 +148,10 @@ export default function Navbar() {
           {/* Mobile login/register OR profile */}
           {!isLoggedIn ? (
             <div className="flex flex-col gap-3 w-full px-10">
-              <a href="/AlifAkhAcademy/login">
+              <a href="/login">
                 <button className="w-full border py-2 rounded">Login</button>
               </a>
-              <a href="/AlifAkhAcademy/register">
+              <a href="/register">
                 <button className="w-full bg-emerald-500 px-5 py-2 rounded-full hover:bg-emerald-600 duration-300">
                   Register
                 </button>
@@ -160,7 +160,7 @@ export default function Navbar() {
           ) : (
             <div className="flex flex-col gap-3 w-full px-10 text-white">
               {isAdmin && (
-                <a href="/AlifAkhAcademy/admin-dashboard">
+                <a href="/admin-dashboard">
                   <button className="w-full border py-2 rounded"> Admin Dashboard</button>
                 </a>
               )}
