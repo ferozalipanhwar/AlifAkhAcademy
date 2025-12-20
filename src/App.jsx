@@ -34,10 +34,10 @@ import TakeTest from './pages/TakeTest/TakeTest'
 function App() {
   return (
     <>
-      <Router basename="/AlifAkhAcademy">
+      <Router basename="/">
         <Routes>
           <Route
-            path="/"
+            path=""
             element={
               <>
             

@@ -90,13 +90,13 @@ export default function Navbar() {
               <div className="absolute right-0 mt-3 bg-white text-black rounded-xl shadow-lg w-48 py-3 z-50">
                 {isAdmin && (
                   <a
-                    href="/AlifAkhAcademy/admin-dashboard"
+                    href="/admin-dashboard"
                     className="block px-4 py-2 hover:bg-gray-100"
                   >
                     🛠️ Admin Dashboard
                   </a>
                 )}
-                <a href="/profile" className="block px-4 py-2 hover:bg-gray-100">
+                <a href="profile" className="block px-4 py-2 hover:bg-gray-100">
                   👤 Profile
                 </a>
                 <button
