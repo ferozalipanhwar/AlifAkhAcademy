@@ -47,7 +47,7 @@ const CourseEnrollments = () => {
 
           <tbody>
             {enrollments.map((item) => (
-              <tr key={item._id} className="border-b hover:bg-gray-50">
+              <tr key={item._id} className="border-b text-white bg-gray-500">
                 <td className="p-3 font-medium">{item.fullname}</td>
                 <td className="p-3">{item.email}</td>
                 <td className="p-3">{item.phoneNumber}</td>
@@ -59,7 +59,7 @@ const CourseEnrollments = () => {
                 </td>
                 <td className="p-3">
                   {item.userId ? (
-                    <span className="text-green-600 font-semibold">
+                    <span className="text-green-800 font-semibold">
                       Logged In
                     </span>
                   ) : (

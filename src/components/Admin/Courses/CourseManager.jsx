@@ -243,7 +243,7 @@ const CourseManager = () => {
             )}
             <h3 className="text-xl font-bold text-blue-400">{course.title}</h3>
             <p>{course.duration}</p>
-            <p>👨‍🏫 {course.teacherId.fullname}</p>
+            <p>👨‍🏫 {course.teacherId===null?"teacher not assigned":course.teacherId.fullname}</p>
             <p className="text-gray-400">{course.description}</p>
 
             <div className="flex justify-between mt-4">
