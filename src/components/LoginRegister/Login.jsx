@@ -158,7 +158,7 @@ const handleSubmit = async (e) => {
         <p className="text-center text-sm mt-4">
           Don’t have an account?{" "}
           <a
-            href="/AlifAkhAcademy/register"
+            href="/register"
             className="text-green-700 font-medium hover:underline"
           >
             Register
