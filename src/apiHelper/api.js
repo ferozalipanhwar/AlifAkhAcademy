@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_BACK_END_URL_RENDER, 
+  baseURL: "https://alifakhacademy-backend.onrender.com/api", 
 });
 
 
