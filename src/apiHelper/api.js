@@ -1,8 +1,10 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://alifakhacademy-backend.onrender.com/api", 
+  baseURL: import.meta.env.VITE_BACK_END_URL_RENDER, 
 });
+
+
 
 // Add token automatically
 API.interceptors.request.use((req) => {

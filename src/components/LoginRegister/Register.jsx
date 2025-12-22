@@ -64,7 +64,7 @@ const Register = () => {
       setMessage("✅ Account created! Redirecting to login...");
 
       setTimeout(() => {
-        window.location.href = "/AlifAkhAcademy/login";
+        window.location.href = "/login";
       }, 1500);
     } catch (error) {
       setMessageType("error");
@@ -115,7 +115,7 @@ const Register = () => {
 
         <p className="text-center text-sm mt-4">
           Already have an account?{" "}
-          <a href="/AlifAkhAcademy/login" className="text-green-700 font-medium hover:underline">
+          <a href="/login" className="text-green-700 font-medium hover:underline">
             Login
           </a>
         </p>
