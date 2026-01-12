@@ -57,8 +57,8 @@ const TeachersSection = () => {
                   alt={teacher.name}
                   className="w-24 h-24 object-cover rounded-full mb-4 border-4 border-emerald-500"
                 />
-                <h3 className="text-lg font-semibold text-gray-800">{teacher.name}</h3>
-                <p className="text-emerald-600 text-sm font-medium">{teacher.role}</p>
+                <h3 className="text-lg font-semibold text-gray-800">{teacher.fullname}</h3>
+                <p className="text-emerald-600 text-sm font-medium">{teacher.courseId?.title}</p>
               </div>
             </div>
           ))}

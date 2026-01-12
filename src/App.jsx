@@ -28,7 +28,9 @@ import PageNotFOund from './components/UniversalComponents/PageNotFound'
 import AdminDashboard from './pages/AdminDashboard'
 import BlogDetail from './pages/BlogDetail'
 import CourseRegister from './pages/CourseRegister'
+import StartPreparationPage from './pages/prepTest/StartPreparationPage'
 import Profile from './pages/Profile'
+import MyResults from './pages/TakeTest/MyResults'
 import TakeTest from './pages/TakeTest/TakeTest'
 
 function App() {
@@ -59,7 +61,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/take-test" element={<TakeTest />} />
-          <Route path="/prep-test" element={<Profile />} />
+          <Route path="/view-certificate" element={<MyResults />} />
+          <Route path="/prep-test" element={<StartPreparationPage />} />
           <Route path="/course-register" element={<><CourseRoadmap/><CourseRegister /> </>} />
           <Route path="/blogs" element={<BlogSection />} />
           <Route path="/blog/:id" element={<BlogDetail />} /> 
