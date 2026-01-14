@@ -1,15 +1,16 @@
-import { LogOut, Menu, User, X } from "lucide-react";
-import { useState } from "react";
+import { BookOpen, ChevronDown, LayoutDashboard, LogOut, Menu, User, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const ListItem = ({ title, href }) => {
   return (
     <ul className="flex items-center gap-3">
-      <li className="font-semibold">
+      <li className="font-semibold list-none">
         <a
           href={href || `#${title.replace(/\s+/g, "")}`}
-          className="hover:border-b-2 hover:text-emerald-500 hover:pb-1 transition-all"
+          className="relative text-sm font-medium text-gray-300 hover:text-emerald-400 transition-colors duration-300 py-2 group"
         >
           {title}
+          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-emerald-500 transition-all duration-300 group-hover:w-full"></span>
         </a>
       </li>
     </ul>
@@ -20,6 +21,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [testPrepOpen, setTestPrepOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("authToken");
@@ -27,100 +29,140 @@ export default function Navbar() {
 
   const isAdmin = user?.isAdmin === true;
 
+  // Scroll Effect for Glassmorphism
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleLogout = () => {
     localStorage.clear();
     window.location.href = "/";
   };
 
   return (
-    <nav className="w-full fixed bg-black px-5 md:px-20 py-5 flex items-center justify-between text-white z-50">
-      {/* Logo */}
-      <div className="flex items-center gap-2">
-        <img className="size-10 shrink-0" src="./images/logo.svg" alt="logo" />
-        <span className="font-semibold text-lg">
-          ALIF-AKH<span className="text-emerald-500 ms-1">ACADEMY</span>
-        </span>
-      </div>
-
-      {/* Desktop Menu */}
-      <div className="hidden md:flex items-center gap-5 relative">
-        <ListItem title="Home" />
-        <ListItem title="Courses" />
-        <ListItem title="Teachers" />
-        <ListItem title="About Us" />
-        <ListItem title="Contact" />
-
-        {/* Test Prep Dropdown */}
-        <div className="relative group">
-          <button className="font-semibold hover:text-emerald-500 transition-all">
-            Test Prep ▾
-          </button>
-          <div className="absolute top-full left-0 hidden group-hover:block bg-white text-black rounded-lg shadow-lg w-48 mt-0 z-50">
-            <a href="/take-test" className="block px-4 py-2 hover:bg-gray-100">Take Test</a>
-            <a href="/prep-test" className="block px-4 py-2 hover:bg-gray-100">Preparation Test</a>
+    <nav
+      className={`fixed w-full top-0 z-50 transition-all duration-300 border-b border-white/5
+        ${scrolled || isOpen ? "bg-black/90 backdrop-blur-md py-4 shadow-xl" : "bg-black/50 backdrop-blur-sm py-5"}
+      `}
+    >
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between text-white">
         
+        {/* ================= Logo ================= */}
+        <div className="flex items-center gap-2 group cursor-pointer" onClick={() => window.location.href = '/'}>
+          <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-green-700 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-emerald-900/50 transition-transform group-hover:scale-105">
+            <img src="./images/logo.svg" alt="A" className="w-6 h-6" onError={(e) => e.target.style.display='none'} />
+            <span className="absolute" style={{opacity: 0}}>A</span> {/* Fallback if no image */}
           </div>
+          <span className="font-bold text-lg tracking-tight">
+            ALIF-AKH<span className="text-emerald-500">ACADEMY</span>
+          </span>
+        </div>
+
+        {/* ================= Desktop Menu ================= */}
+        <div className="hidden md:flex items-center gap-8">
+          <ListItem title="Home" />
+          <ListItem title="Courses" />
+          <ListItem title="Teachers" />
+          <ListItem title="About Us" />
+          <ListItem title="Contact" />
+
+          {/* Test Prep Dropdown */}
+          <div className="relative group py-2">
+            <button className="flex items-center gap-1 font-medium text-sm text-gray-300 hover:text-emerald-400 transition-colors">
+              Test Prep <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-300" />
+            </button>
+            
+            {/* Dropdown Content */}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-2">
+              <div className="bg-[#1a1a1a] border border-white/10 rounded-xl shadow-2xl overflow-hidden w-48 p-2">
+                <a href="/take-test" className="block px-4 py-2.5 text-sm text-gray-200 hover:bg-emerald-600/20 hover:text-emerald-400 rounded-lg transition-colors">
+                  Take Test
+                </a>
+                <a href="/prep-test" className="block px-4 py-2.5 text-sm text-gray-200 hover:bg-emerald-600/20 hover:text-emerald-400 rounded-lg transition-colors">
+                  Preparation Test
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ================= Desktop Right Section ================= */}
+        <div className="hidden md:flex items-center gap-4">
+          {!isLoggedIn ? (
+            <>
+              <a href="/login" className="text-sm font-medium text-gray-300 hover:text-emerald-400 transition-colors px-4 py-2">
+                Login
+              </a>
+              <a href="/register">
+                <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-all shadow-lg shadow-emerald-900/20 hover:shadow-emerald-900/40 transform hover:-translate-y-0.5">
+                  Register
+                </button>
+              </a>
+            </>
+          ) : (
+            <div className="relative">
+              <button
+                onClick={() => setProfileOpen(!profileOpen)}
+                className="flex items-center gap-3 bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full border border-white/10 transition-all group"
+              >
+                <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-sm font-bold shadow-inner text-white">
+                  <User size={16} />
+                </div>
+                <span className="text-sm font-medium text-gray-200 pr-2 group-hover:text-emerald-400 transition-colors">
+                  {user?.name?.split(" ")[0]}
+                </span>
+              </button>
+
+              {profileOpen && (
+                <>
+                  <div className="fixed inset-0 z-10" onClick={() => setProfileOpen(false)} />
+                  <div className="absolute right-0 mt-3 w-56 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-2xl py-2 z-20">
+                    <div className="px-4 py-3 border-b border-white/10 mb-2">
+                      <p className="text-sm text-white font-medium truncate">{user?.name}</p>
+                      <p className="text-xs text-gray-400 truncate">Student Account</p>
+                    </div>
+
+                    {isAdmin && (
+                      <a href="/admin-dashboard" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-emerald-600/10 hover:text-emerald-400 mx-2 rounded-lg transition-colors">
+                        <LayoutDashboard size={16} /> Admin Dashboard
+                      </a>
+                    )}
+                    
+                    <a href="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-emerald-600/10 hover:text-emerald-400 mx-2 rounded-lg transition-colors">
+                      <User size={16} /> My Profile
+                    </a>
+
+                    <div className="border-t border-white/10 my-2"></div>
+                    
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 mx-2 rounded-lg transition-colors"
+                    >
+                      <LogOut size={16} /> Logout
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* ================= Mobile Menu Button ================= */}
+        <div className="md:hidden">
+          <button 
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2 text-gray-300 hover:text-emerald-400 transition-colors"
+          >
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
       </div>
 
-      {/* Desktop Right Section */}
-      <div className="hidden md:flex items-center gap-5">
-        {!isLoggedIn ? (
-          <>
-            <a href="/login">
-              <button className="me-7 cursor-pointer hover:text-green-500">Login</button>
-            </a>
-            <a href="/register">
-              <button className="bg-emerald-500 px-5 py-2 rounded-full hover:bg-emerald-600 duration-300">
-                Register
-              </button>
-            </a>
-          </>
-        ) : (
-          <div className="relative">
-            <button
-              onClick={() => setProfileOpen(!profileOpen)}
-              className="flex items-center gap-2 cursor-pointer hover:text-green-400"
-            >
-              <User className="w-6 h-6 text-emerald-500" />
-              <span className="font-medium">{user?.name}</span>
-            </button>
-
-            {profileOpen && (
-              <div className="absolute right-0 mt-3 bg-white text-black rounded-xl shadow-lg w-48 py-3 z-50">
-                {isAdmin && (
-                  <a
-                    href="/admin-dashboard"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    🛠️ Admin Dashboard
-                  </a>
-                )}
-                <a href="profile" className="block px-4 py-2 hover:bg-gray-100">
-                  👤 Profile
-                </a>
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-left px-4 py-2 flex items-center gap-2 hover:bg-red-100"
-                >
-                  <LogOut size={18} className="text-red-600" /> Logout
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* Mobile Menu Button */}
-      <div className="md:hidden">
-        <button onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
-      </div>
-
-      {/* Mobile Dropdown */}
-      {isOpen && (
-        <div className="absolute top-16 left-0 w-full bg-black flex flex-col items-center gap-5 py-5 md:hidden z-50">
+      {/* ================= Mobile Dropdown ================= */}
+      <div className={`md:hidden absolute top-full left-0 w-full bg-[#0a0a0a] border-t border-white/10 shadow-2xl transition-all duration-300 overflow-hidden ${isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"}`}>
+        <div className="flex flex-col gap-1 p-6">
           <ListItem title="Home" />
           <ListItem title="Courses" />
           <ListItem title="Teachers" />
@@ -128,58 +170,78 @@ export default function Navbar() {
           <ListItem title="Contact" />
 
           {/* Test Prep Mobile */}
-          <div className="w-full px-10">
+          <div className="mt-2 py-2 border-t border-white/10 border-b">
             <button
               onClick={() => setTestPrepOpen(!testPrepOpen)}
-              className="w-full  py-2 rounded "
+              className="w-full flex items-center justify-between text-gray-300 font-medium py-2 hover:text-emerald-400"
             >
-              Test Prep ▾
+              Test Prep <ChevronDown size={16} className={`transition-transform ${testPrepOpen ? 'rotate-180' : ''}`} />
             </button>
             
             {testPrepOpen && (
-              <div className="flex flex-col text-center   mt-2 gap-2 px-4 text-white bg-gray-700 rounded-lg py-3 ">
-                <a href="/take-test" className="hover:text-emerald-400"> Take Test</a>
-                <a href="/prep-test" className="hover:text-emerald-400">Preparation Test</a>
-              
+              <div className="flex flex-col gap-2 pl-4 py-2 bg-white/5 rounded-lg mt-2 mb-2">
+                <a href="/take-test" className="text-sm text-gray-400 hover:text-emerald-400 py-1">Take Test</a>
+                <a href="/prep-test" className="text-sm text-gray-400 hover:text-emerald-400 py-1">Preparation Test</a>
               </div>
             )}
           </div>
 
-          {/* Mobile login/register OR profile */}
-          {!isLoggedIn ? (
-            <div className="flex flex-col gap-3 w-full px-10">
-              <a href="/login">
-                <button className="w-full border py-2 rounded">Login</button>
-              </a>
-              <a href="/register">
-                <button className="w-full bg-emerald-500 px-5 py-2 rounded-full hover:bg-emerald-600 duration-300">
-                  Register
-                </button>
-              </a>
-            </div>
-          ) : (
-            <div className="flex flex-col gap-3 w-full px-10 text-white">
-              {isAdmin && (
-                <a href="/admin-dashboard">
-                  <button className="w-full border py-2 rounded"> Admin Dashboard</button>
+          {/* Mobile Auth */}
+          <div className="mt-6 flex flex-col gap-3">
+            {!isLoggedIn ? (
+              <>
+                <a href="/login">
+                  <button className="w-full border border-white/20 text-white py-3 rounded-xl hover:bg-white/5 transition-colors font-medium">
+                    Login
+                  </button>
                 </a>
-              )}
-              <a href="/profile">
-                <button className="w-full border py-2 rounded">Profile</button>
-              </a>
-              <a href="/my-courses">
-                <button className="w-full border py-2 rounded">My Courses</button>
-              </a>
-              <button
-                onClick={handleLogout}
-                className="w-full bg-red-500 py-2 rounded"
-              >
-                Logout
-              </button>
-            </div>
-          )}
+                <a href="/register">
+                  <button className="w-full bg-emerald-600 text-white py-3 rounded-xl hover:bg-emerald-700 transition-colors font-medium shadow-lg shadow-emerald-900/20">
+                    Register
+                  </button>
+                </a>
+              </>
+            ) : (
+              <div className="flex flex-col gap-2">
+                 <div className="flex items-center gap-3 p-4 bg-white/5 rounded-xl border border-white/5 mb-2">
+                    <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold">
+                      <User size={20} />
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="text-sm font-medium text-white truncate">{user?.name}</p>
+                      <p className="text-xs text-gray-400">Logged In</p>
+                    </div>
+                 </div>
+
+                {isAdmin && (
+                  <a href="/admin-dashboard">
+                    <button className="w-full flex items-center gap-3 text-gray-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-lg transition-colors">
+                       <LayoutDashboard size={18} /> Admin Dashboard
+                    </button>
+                  </a>
+                )}
+                <a href="/profile">
+                  <button className="w-full flex items-center gap-3 text-gray-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-lg transition-colors">
+                    <User size={18} /> Profile
+                  </button>
+                </a>
+                <a href="/my-courses">
+                   <button className="w-full flex items-center gap-3 text-gray-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-lg transition-colors">
+                    <BookOpen size={18} /> My Courses
+                  </button>
+                </a>
+                
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 text-red-400 hover:bg-red-500/10 px-4 py-3 rounded-lg transition-colors mt-2"
+                >
+                  <LogOut size={18} /> Logout
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 }

@@ -22,6 +22,7 @@ import Home from './components/home/Home'
 import Login from './components/LoginRegister/Login'
 import Register from './components/LoginRegister/Register'
 import Navbar from './components/navbar/Navbar'
+import ProgramSection from './components/program/ProgramSection'
 import TeachersSection from './components/Teachers/TeachersSection'
 import TestimonialsSection from './components/Testimonials/TestimonialsSection'
 import PageNotFOund from './components/UniversalComponents/PageNotFound'
@@ -48,6 +49,7 @@ function App() {
                 <EducationSection />
                 <FeaturesSection />
                 <CoursesSection />
+                <ProgramSection />
                 <TeachersSection />
                 <TestimonialsSection />
                 <BlogSection />
