@@ -5,7 +5,7 @@ const ListItem = ({ title }) => {
             <li className="font-semibold">
                 <a
                     href={`#${title.replace(/\s+/g, '')}`}
-                    className="hover:border-b-2 hover:text-emerald-500 hover:pb-1 transition-all"
+                    className="hover:border-b-2 text-white hover:text-emerald-500 hover:pb-1 transition-all"
                 >
                     {title}
                 </a>

@@ -3,8 +3,11 @@ import {
   Bell,
   BookOpen,
   ChevronRight,
+  ClipboardList,
+  FileQuestion,
   FileText,
   GraduationCap,
+  Layers,
   LayoutDashboard,
   LogOut,
   Mail,
@@ -21,6 +24,10 @@ import API from "../apiHelper/api";
 // Professional Menu Configuration
 const menuItems = [
   { id: "", name: "Overview", icon: <LayoutDashboard size={20} /> },
+  // Test Engine Section
+  { id: "manage-categories", name: "Test Categories", icon: <Layers size={20} /> },
+  { id: "manage-tests", name: "Manage Tests", icon: <ClipboardList size={20} /> },
+  { id: "manage-questions", name: "Question Bank", icon: <FileQuestion size={20} /> },
   { id: "courses", name: "Course Manager", icon: <BookOpen size={20} /> },
   { id: "teachers", name: "Teachers", icon: <Users size={20} /> },
   { id: "students", name: "Students", icon: <GraduationCap size={20} /> },

@@ -1,35 +1,27 @@
-import { BookOpen, ChevronDown, LayoutDashboard, LogOut, Menu, User, X } from "lucide-react";
+import { 
+  BookOpen, 
+  Bot, 
+  ChevronDown, 
+  LayoutDashboard, 
+  LogOut, 
+  Menu, 
+  User, 
+  X 
+} from "lucide-react";
 import { useEffect, useState } from "react";
-
-const ListItem = ({ title, href }) => {
-  return (
-    <ul className="flex items-center gap-3">
-      <li className="font-semibold list-none">
-        <a
-          href={href || `#${title.replace(/\s+/g, "")}`}
-          className="relative text-sm font-medium text-gray-300 hover:text-emerald-400 transition-colors duration-300 py-2 group"
-        >
-          {title}
-          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-emerald-500 transition-all duration-300 group-hover:w-full"></span>
-        </a>
-      </li>
-    </ul>
-  );
-};
+import ListItem from "./ListItem"; // Assuming you have this component
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [testPrepOpen, setTestPrepOpen] = useState(false);
+  const [testPrepOpen, setTestPrepOpen] = useState(false); // 👈 New state for mobile dropdown
   const [scrolled, setScrolled] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("authToken");
   const isLoggedIn = !!token;
-
   const isAdmin = user?.isAdmin === true;
 
-  // Scroll Effect for Glassmorphism
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
@@ -52,8 +44,7 @@ export default function Navbar() {
         {/* ================= Logo ================= */}
         <div className="flex items-center gap-2 group cursor-pointer" onClick={() => window.location.href = '/'}>
           <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-green-700 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-emerald-900/50 transition-transform group-hover:scale-105">
-            <img src="./images/logo.svg" alt="A" className="w-6 h-6" onError={(e) => e.target.style.display='none'} />
-            <span className="absolute" style={{opacity: 0}}>A</span> {/* Fallback if no image */}
+            <span className="font-bold text-xl">A</span>
           </div>
           <span className="font-bold text-lg tracking-tight">
             ALIF-AKH<span className="text-emerald-500">ACADEMY</span>
@@ -61,28 +52,27 @@ export default function Navbar() {
         </div>
 
         {/* ================= Desktop Menu ================= */}
-        <div className="hidden md:flex items-center gap-8">
-          <ListItem title="Home" />
-          <ListItem title="Courses" />
-          <ListItem title="Teachers" />
-          <ListItem title="About Us" />
-          <ListItem title="Contact" />
+        <div className="hidden md:flex items-center gap-6">
+          <ListItem title="Home" href="/" />
+          <ListItem title="Courses" href="/courses" />
+          
+          {/* AI Tutor Desktop */}
+          <a href="/ai-tutor" className="text-sm font-medium text-gray-300 hover:text-emerald-400 transition-colors flex items-center gap-1 group">
+             <Bot size={16} className="text-emerald-500 group-hover:animate-bounce" /> AI Tutor
+          </a>
 
-          {/* Test Prep Dropdown */}
+          <ListItem title="Teachers" href="/teachers" />
+          <ListItem title="Contact" href="/contact" />
+        
+          {/* Test Prep Dropdown (Desktop) */}
           <div className="relative group py-2">
             <button className="flex items-center gap-1 font-medium text-sm text-gray-300 hover:text-emerald-400 transition-colors">
               Test Prep <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-300" />
             </button>
-            
-            {/* Dropdown Content */}
             <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-2">
               <div className="bg-[#1a1a1a] border border-white/10 rounded-xl shadow-2xl overflow-hidden w-48 p-2">
-                <a href="/take-test" className="block px-4 py-2.5 text-sm text-gray-200 hover:bg-emerald-600/20 hover:text-emerald-400 rounded-lg transition-colors">
-                  Take Test
-                </a>
-                <a href="/prep-test" className="block px-4 py-2.5 text-sm text-gray-200 hover:bg-emerald-600/20 hover:text-emerald-400 rounded-lg transition-colors">
-                  Preparation Test
-                </a>
+                <a href="/take-test" className="block px-4 py-2.5 text-sm text-gray-200 hover:bg-emerald-600/20 hover:text-emerald-400 rounded-lg transition-colors">Take Test</a>
+                <a href="/prep-test" className="block px-4 py-2.5 text-sm text-gray-200 hover:bg-emerald-600/20 hover:text-emerald-400 rounded-lg transition-colors">Preparation Test</a>
               </div>
             </div>
           </div>
@@ -92,9 +82,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-4">
           {!isLoggedIn ? (
             <>
-              <a href="/login" className="text-sm font-medium text-gray-300 hover:text-emerald-400 transition-colors px-4 py-2">
-                Login
-              </a>
+              <a href="/login" className="text-sm font-medium text-gray-300 hover:text-emerald-400 transition-colors px-4 py-2">Login</a>
               <a href="/register">
                 <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-all shadow-lg shadow-emerald-900/20 hover:shadow-emerald-900/40 transform hover:-translate-y-0.5">
                   Register
@@ -103,10 +91,7 @@ export default function Navbar() {
             </>
           ) : (
             <div className="relative">
-              <button
-                onClick={() => setProfileOpen(!profileOpen)}
-                className="flex items-center gap-3 bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full border border-white/10 transition-all group"
-              >
+              <button onClick={() => setProfileOpen(!profileOpen)} className="flex items-center gap-3 bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full border border-white/10 transition-all group">
                 <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-sm font-bold shadow-inner text-white">
                   <User size={16} />
                 </div>
@@ -123,25 +108,10 @@ export default function Navbar() {
                       <p className="text-sm text-white font-medium truncate">{user?.name}</p>
                       <p className="text-xs text-gray-400 truncate">Student Account</p>
                     </div>
-
-                    {isAdmin && (
-                      <a href="/admin-dashboard" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-emerald-600/10 hover:text-emerald-400 mx-2 rounded-lg transition-colors">
-                        <LayoutDashboard size={16} /> Admin Dashboard
-                      </a>
-                    )}
-                    
-                    <a href="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-emerald-600/10 hover:text-emerald-400 mx-2 rounded-lg transition-colors">
-                      <User size={16} /> My Profile
-                    </a>
-
+                    {isAdmin && <a href="/admin-dashboard" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-emerald-600/10 hover:text-emerald-400 mx-2 rounded-lg transition-colors"><LayoutDashboard size={16} /> Admin Dashboard</a>}
+                    <a href="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-emerald-600/10 hover:text-emerald-400 mx-2 rounded-lg transition-colors"><User size={16} /> My Profile</a>
                     <div className="border-t border-white/10 my-2"></div>
-                    
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 mx-2 rounded-lg transition-colors"
-                    >
-                      <LogOut size={16} /> Logout
-                    </button>
+                    <button onClick={handleLogout} className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 mx-2 rounded-lg transition-colors"><LogOut size={16} /> Logout</button>
                   </div>
                 </>
               )}
@@ -151,10 +121,7 @@ export default function Navbar() {
 
         {/* ================= Mobile Menu Button ================= */}
         <div className="md:hidden">
-          <button 
-            onClick={() => setIsOpen(!isOpen)}
-            className="p-2 text-gray-300 hover:text-emerald-400 transition-colors"
-          >
+          <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-gray-300 hover:text-emerald-400 transition-colors">
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
@@ -162,84 +129,96 @@ export default function Navbar() {
 
       {/* ================= Mobile Dropdown ================= */}
       <div className={`md:hidden absolute top-full left-0 w-full bg-[#0a0a0a] border-t border-white/10 shadow-2xl transition-all duration-300 overflow-hidden ${isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"}`}>
-        <div className="flex flex-col gap-1 p-6">
-          <ListItem title="Home" />
-          <ListItem title="Courses" />
-          <ListItem title="Teachers" />
-          <ListItem title="About Us" />
-          <ListItem title="Contact" />
-
-          {/* Test Prep Mobile */}
-          <div className="mt-2 py-2 border-t border-white/10 border-b">
-            <button
-              onClick={() => setTestPrepOpen(!testPrepOpen)}
-              className="w-full flex items-center justify-between text-gray-300 font-medium py-2 hover:text-emerald-400"
-            >
-              Test Prep <ChevronDown size={16} className={`transition-transform ${testPrepOpen ? 'rotate-180' : ''}`} />
-            </button>
-            
-            {testPrepOpen && (
-              <div className="flex flex-col gap-2 pl-4 py-2 bg-white/5 rounded-lg mt-2 mb-2">
-                <a href="/take-test" className="text-sm text-gray-400 hover:text-emerald-400 py-1">Take Test</a>
-                <a href="/prep-test" className="text-sm text-gray-400 hover:text-emerald-400 py-1">Preparation Test</a>
-              </div>
-            )}
+        <div className="flex flex-col gap-1 p-6 h-[90vh] overflow-y-auto">
+          
+          <ListItem title="Home" href="/" />
+          <ListItem className="text-emerald-400 color-white" title="Courses" href="/courses" />
+          
+          
+          {/* 🤖 Mobile AI Tutor */}
+          <div className="py-2">
+             <a href="/ai-tutor" className="flex items-center gap-2 text-emerald-400 font-bold bg-emerald-900/20 px-4 py-3 rounded-xl border border-emerald-500/30">
+                <Bot size={20} /> Ask AI Tutor
+             </a>
           </div>
 
-          {/* Mobile Auth */}
+          <ListItem title="Teachers" href="/teachers" />
+          <ListItem title="Contact" href="/contact" />
+
+          {/* 📱 Mobile Test Prep Accordion */}
+          <div className="border-t border-white/10 border-b py-2 mt-2">
+             <button 
+               onClick={() => setTestPrepOpen(!testPrepOpen)}
+               className="flex w-full items-center justify-between text-gray-300 font-medium py-2 hover:text-emerald-400 transition-colors"
+             >
+                Test Prep 
+                <ChevronDown size={16} className={`transition-transform duration-300 ${testPrepOpen ? "rotate-180 text-emerald-500" : ""}`} />
+             </button>
+             
+             {/* Submenu */}
+             <div className={`flex flex-col gap-2 pl-4 overflow-hidden transition-all duration-300 ${testPrepOpen ? "max-h-40 mt-2 pb-2" : "max-h-0"}`}>
+                <a href="/take-test" className="text-sm text-gray-400 hover:text-emerald-400 py-1 flex items-center gap-2">
+                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div> Take Test
+                </a>
+                <a href="/prep-test" className="text-sm text-gray-400 hover:text-emerald-400 py-1 flex items-center gap-2">
+                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div> Preparation Test
+                </a>
+             </div>
+          </div>
+          
+          {/* 📱 Mobile Auth Section */}
           <div className="mt-6 flex flex-col gap-3">
-            {!isLoggedIn ? (
-              <>
-                <a href="/login">
-                  <button className="w-full border border-white/20 text-white py-3 rounded-xl hover:bg-white/5 transition-colors font-medium">
-                    Login
-                  </button>
-                </a>
-                <a href="/register">
-                  <button className="w-full bg-emerald-600 text-white py-3 rounded-xl hover:bg-emerald-700 transition-colors font-medium shadow-lg shadow-emerald-900/20">
-                    Register
-                  </button>
-                </a>
-              </>
-            ) : (
-              <div className="flex flex-col gap-2">
-                 <div className="flex items-center gap-3 p-4 bg-white/5 rounded-xl border border-white/5 mb-2">
-                    <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold">
-                      <User size={20} />
-                    </div>
-                    <div className="overflow-hidden">
-                      <p className="text-sm font-medium text-white truncate">{user?.name}</p>
-                      <p className="text-xs text-gray-400">Logged In</p>
-                    </div>
-                 </div>
+             {!isLoggedIn ? (
+               <>
+                 <a href="/login" className="w-full">
+                   <button className="w-full border border-white/20 text-white py-3 rounded-xl hover:bg-white/5 transition-colors font-medium">
+                     Login
+                   </button>
+                 </a>
+                 <a href="/register" className="w-full">
+                   <button className="w-full bg-emerald-600 text-white py-3 rounded-xl hover:bg-emerald-700 transition-colors font-medium shadow-lg shadow-emerald-900/20">
+                     Register
+                   </button>
+                 </a>
+               </>
+             ) : (
+               <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                  {/* User Info Card */}
+                  <div className="flex items-center gap-3 mb-4 border-b border-white/10 pb-4">
+                     <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold">
+                        {user?.name?.charAt(0)}
+                     </div>
+                     <div className="overflow-hidden">
+                        <p className="text-sm font-bold text-white truncate">{user?.name}</p>
+                        <p className="text-xs text-emerald-400">Logged In</p>
+                     </div>
+                  </div>
 
-                {isAdmin && (
-                  <a href="/admin-dashboard">
-                    <button className="w-full flex items-center gap-3 text-gray-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-lg transition-colors">
-                       <LayoutDashboard size={18} /> Admin Dashboard
-                    </button>
-                  </a>
-                )}
-                <a href="/profile">
-                  <button className="w-full flex items-center gap-3 text-gray-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-lg transition-colors">
-                    <User size={18} /> Profile
-                  </button>
-                </a>
-                <a href="/my-courses">
-                   <button className="w-full flex items-center gap-3 text-gray-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-lg transition-colors">
-                    <BookOpen size={18} /> My Courses
-                  </button>
-                </a>
-                
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center gap-3 text-red-400 hover:bg-red-500/10 px-4 py-3 rounded-lg transition-colors mt-2"
-                >
-                  <LogOut size={18} /> Logout
-                </button>
-              </div>
-            )}
+                  {/* Links */}
+                  <div className="flex flex-col gap-2">
+                     {isAdmin && (
+                        <a href="/admin-dashboard" className="flex items-center gap-3 text-gray-300 hover:text-white px-2 py-2 rounded-lg hover:bg-white/5 transition-colors">
+                           <LayoutDashboard size={18} /> Admin Panel
+                        </a>
+                     )}
+                     <a href="/profile" className="flex items-center gap-3 text-gray-300 hover:text-white px-2 py-2 rounded-lg hover:bg-white/5 transition-colors">
+                        <User size={18} /> My Profile
+                     </a>
+                     <a href="/my-courses" className="flex items-center gap-3 text-gray-300 hover:text-white px-2 py-2 rounded-lg hover:bg-white/5 transition-colors">
+                        <BookOpen size={18} /> My Courses
+                     </a>
+                     
+                     <button 
+                       onClick={handleLogout} 
+                       className="flex items-center gap-3 text-red-400 hover:text-red-300 px-2 py-2 rounded-lg hover:bg-red-500/10 transition-colors mt-2"
+                     >
+                        <LogOut size={18} /> Logout
+                     </button>
+                  </div>
+               </div>
+             )}
           </div>
+
         </div>
       </div>
     </nav>
