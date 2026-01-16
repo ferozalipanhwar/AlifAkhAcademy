@@ -8,6 +8,7 @@ import Contacts from './components/Admin/Courses/Contacts'
 import CourseEnrollments from './components/Admin/Courses/CourseEnrollments'
 import CourseManager from './components/Admin/Courses/CourseManager'
 import ManageCategories from './components/Admin/Courses/ManageCategories'
+import ManagePrep from './components/Admin/Courses/ManagePrep'
 import ManageQuestions from './components/Admin/Courses/ManageQuestions'
 import ManageTests from './components/Admin/Courses/ManageTests'
 import Settings from './components/Admin/Courses/Settings'
@@ -78,6 +79,8 @@ function App() {
                  <Route path='courses' element={<CourseManager/>}/>
                  <Route path='teachers' element={<Teachers/>}/>
                  <Route path='students' element={<Students/>} />
+                 <Route path='manage-prep' element={<ManagePrep/>} />
+               
                  <Route path='contacts' element={<Contacts/>} />
                  <Route path='manage-categories' element={<ManageCategories/>} />
                  <Route path='manage-tests' element={<ManageTests/>} />
