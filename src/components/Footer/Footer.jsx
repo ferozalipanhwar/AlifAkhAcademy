@@ -51,6 +51,8 @@ const Footer = () => {
               <FooterLink text="Test Preparation" href="/take-test" />
               <FooterLink text="Privacy Policy" href="#" />
               <FooterLink text="Terms of Service" href="#" />
+              <FooterLink text="Help & Support" href="#" />
+                 <FooterLink text="Verify-certificate" href="/verify-certificate" />
             </ul>
           </div>
 

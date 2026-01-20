@@ -38,6 +38,7 @@ import StartPreparationPage from './pages/prepTest/StartPreparationPage'
 import Profile from './pages/Profile'
 import MyResults from './pages/TakeTest/MyResults'
 import TakeTest from './pages/TakeTest/TakeTest'
+import VerifyCertificate from './pages/VerifyCertificate'
 function App() {
   return (
     <>
@@ -69,6 +70,7 @@ function App() {
           <Route path="/ai-tutor" element={<AiTutor />} />
           <Route path="/take-test" element={<TakeTest />} />
           <Route path="/view-certificate" element={<MyResults />} />
+          <Route path='verify-certificate' element={<VerifyCertificate/>}/>
           <Route path="/prep-test" element={<StartPreparationPage />} />
           <Route path="/course-register" element={<><CourseRoadmap/><CourseRegister /> </>} />
           <Route path="/blogs" element={<BlogSection />} />
