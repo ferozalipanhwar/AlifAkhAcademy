@@ -61,17 +61,17 @@ const Footer = () => {
               <li className="flex items-start gap-3">
                 <MapPin className="text-emerald-500 shrink-0" size={20} />
                 <span>
-                  123 Education City, Main Boulevard,<br />
-                  Karachi, Pakistan
+                  near baba aata chaki , post office road,<br />
+                  badin sindh, Pakistan
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="text-emerald-500 shrink-0" size={20} />
-                <span>+92 300 1234567</span>
+                <span>+92 325 6749757</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="text-emerald-500 shrink-0" size={20} />
-                <span>support@alifakh.com</span>
+                <span>supportalifakh@gmail.com</span>
               </li>
             </ul>
           </div>

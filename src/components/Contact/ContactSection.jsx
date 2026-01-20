@@ -73,21 +73,21 @@ const ContactSection = () => {
               <ContactCard 
                 icon={<MapPin size={24} />} 
                 title="Our Location" 
-                text="LSE Houghton Street, London WC2A 2AE, UK" 
+                text="near baba aata chaki post office road, badin sindh, pakistan" 
                 color="text-red-500"
                 bgColor="bg-red-50"
               />
               <ContactCard 
                 icon={<Mail size={24} />} 
                 title="Email Us" 
-                text="hello@alif-akh.com" 
+                text="supportalifakh@gmail.com" 
                 color="text-blue-500"
                 bgColor="bg-blue-50"
               />
               <ContactCard 
                 icon={<Phone size={24} />} 
                 title="Call Support" 
-                text="+44 (20) 7405 7686" 
+                text="+92 325 6749 757" 
                 color="text-emerald-500"
                 bgColor="bg-emerald-50"
               />
@@ -95,13 +95,18 @@ const ContactSection = () => {
 
             {/* Map */}
             <div className="flex-1 min-h-[300px] bg-gray-200 rounded-2xl overflow-hidden shadow-lg border border-gray-100 relative group">
-              <iframe
-                title="Google Map"
-                className="w-full h-full grayscale group-hover:grayscale-0 transition-all duration-500"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.90502179144!2d-0.11653128407486302!3d51.51490521796685!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604b3036315a5%3A0xecc330f14690747a!2sLSE%2C%20Houghton%20St%2C%20London%20WC2A%202AE%2C%20UK!5e0!3m2!1sen!2s!4v1652362070335!5m2!1sen!2s"
-                allowFullScreen=""
-                loading="lazy"
-              ></iframe>
+
+
+                    <iframe
+          title="Google Map"
+          className="w-full h-full grayscale group-hover:grayscale-0 transition-all duration-500"
+          src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d13885.941714060508!2d68.837242!3d24.65572!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1705700000000"
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+
+               
             </div>
           </div>
 
@@ -122,7 +127,7 @@ const ContactSection = () => {
                     <input
                       type="text"
                       name="name"
-                      placeholder="John Doe"
+                      placeholder="Feroz Ali"
                       value={form.name}
                       onChange={handleChange}
                       className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all"
@@ -134,7 +139,7 @@ const ContactSection = () => {
                     <input
                       type="email"
                       name="email"
-                      placeholder="john@example.com"
+                      placeholder="Feroz@example.com"
                       value={form.email}
                       onChange={handleChange}
                       className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all"
