@@ -33,6 +33,7 @@ import PageNotFOund from './components/UniversalComponents/PageNotFound'
 import AdminDashboard from './pages/AdminDashboard'
 import AiTutor from './pages/AiTutor'
 import BlogDetail from './pages/BlogDetail'
+import CoursePlayer from './pages/CoursePlayer'
 import CourseRegister from './pages/CourseRegister'
 import StartPreparationPage from './pages/prepTest/StartPreparationPage'
 import Profile from './pages/Profile'
@@ -69,6 +70,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/ai-tutor" element={<AiTutor />} />
           <Route path="/take-test" element={<TakeTest />} />
+          <Route path="/learning/:id" element={<CoursePlayer />} />
           <Route path="/view-certificate" element={<MyResults />} />
           <Route path='verify-certificate' element={<VerifyCertificate/>}/>
           <Route path="/prep-test" element={<StartPreparationPage />} />
