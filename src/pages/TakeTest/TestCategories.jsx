@@ -23,6 +23,8 @@ const TestCategories = ({ onStart }) => {
     setLoading(true);
     const res = await API.get(`/tests/category/${id}`);
     setTests(res.data);
+    console.log(tests);
+    
     setLoading(false);
   };
 
@@ -71,7 +73,7 @@ const TestCategories = ({ onStart }) => {
                   <FaClipboardList size={24} />
                 </div>
                 <span className="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded-md">
-                  {test.questionsCount || "20"} Qs
+                  {test.totalMarks || "20"} Qs
                 </span>
               </div>
 
