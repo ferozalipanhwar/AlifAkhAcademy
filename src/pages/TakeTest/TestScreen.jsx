@@ -11,12 +11,14 @@ const TestScreen = ({ test, onFinish }) => {
   const submitted = useRef(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Fetch questions on load
   useEffect(() => {
     API.get(`/tests/start/${test._id}`)
       .then((res) => setQuestions(res.data))
       .finally(() => setLoading(false));
   }, [test._id]);
 
+  // Timer countdown
   useEffect(() => {
     if (timeLeft <= 0 && !submitted.current) submitTest();
     const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
@@ -24,22 +26,31 @@ const TestScreen = ({ test, onFinish }) => {
   }, [timeLeft]);
 
   const submitTest = async () => {
-    if (submitted.current) return;
-    submitted.current = true;
-    setSubmitting(true);
+  if (submitted.current) return;
+  submitted.current = true;
+  setSubmitting(true);
 
-    const formatted = Object.keys(answers).map((id) => ({
-      questionId: id,
-      selectedAnswer: answers[id],
-    }));
+  const formatted = Object.keys(answers).map((id) => ({
+    questionId: id,
+    selectedAnswer: answers[id],
+  }));
 
+  try {
     const res = await API.post("/tests/submit", {
       testId: test._id,
       answers: formatted,
     });
 
+    // ✅ Pass backend result to parent
     onFinish(res.data);
-  };
+  } catch (err) {
+    console.error("Submit test failed:", err);
+    alert("Failed to submit test. Try again!");
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   if (loading) return <div className="text-center mt-20 text-gray-500">Loading your test...</div>;
   if (!questions.length) return <div className="text-center mt-20 text-red-500">Error loading questions.</div>;

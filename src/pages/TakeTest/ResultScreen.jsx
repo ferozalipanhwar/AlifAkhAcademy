@@ -1,8 +1,9 @@
 import { FaCertificate, FaCheckCircle, FaRedo, FaTimesCircle } from "react-icons/fa";
 
 const ResultScreen = ({ result }) => {
-  const isPassed = result.status === "PASS";
-  console.log(result.status);
+  const isPassed = result.status === "PASS" || result.status === "Pass";
+  console.log( "this esjnjh",result.status);
+
   
 
   return (
