@@ -15,6 +15,7 @@ import Settings from './components/Admin/Courses/Settings'
 import Students from './components/Admin/Courses/Students'
 import Teachers from './components/Admin/Courses/Teachers'
 import UsersList from './components/Admin/Courses/UsersList'
+import AttemptTest from './components/Admin/prepComponent/attemptTests/AttemptTest'
 import BlogSection from './components/Blog/BlogSection'
 import ContactSection from './components/Contact/ContactSection'
 import CourseRoadmap from './components/Courses/CourseRoadmap'
@@ -84,7 +85,7 @@ function App() {
                  <Route path='teachers' element={<Teachers/>}/>
                  <Route path='students' element={<Students/>} />
                  <Route path='manage-prep' element={<ManagePrep/>} />
-               
+                 <Route path='attempt-tests' element={<AttemptTest/>} />
                  <Route path='contacts' element={<Contacts/>} />
                  <Route path='manage-categories' element={<ManageCategories/>} />
                  <Route path='manage-tests' element={<ManageTests/>} />
