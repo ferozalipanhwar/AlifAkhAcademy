@@ -14,6 +14,7 @@ import {
   Menu,
   Search,
   Settings,
+  Upload,
   Users,
   X
 } from "lucide-react";
@@ -36,8 +37,10 @@ const menuItems = [
   {id: "manage-prep", name: "Prep Tests", icon: <BookOpen size={20} /> },
  {id:"attempt-tests", name:"Test Attempts", icon:<ClipboardList size={20} />},
   { id: "contacts", name: "Messages", icon: <Mail size={20} /> },
+   {id: "lectures", name:"lectures", icon:<Upload size={20}/>},
   { id: "blogs", name: "Blog Posts", icon: <FileText size={20} /> },
   { id: "settings", name: "Settings", icon: <Settings size={20} /> },
+ 
 ];
 
 const AdminDashboard = () => {

@@ -15,6 +15,7 @@ import Settings from './components/Admin/Courses/Settings'
 import Students from './components/Admin/Courses/Students'
 import Teachers from './components/Admin/Courses/Teachers'
 import UsersList from './components/Admin/Courses/UsersList'
+import AdminLectures from './components/Admin/Lecture/AdminLectures'
 import AttemptTest from './components/Admin/prepComponent/attemptTests/AttemptTest'
 import BlogSection from './components/Blog/BlogSection'
 import ContactSection from './components/Contact/ContactSection'
@@ -90,6 +91,7 @@ function App() {
                  <Route path='manage-categories' element={<ManageCategories/>} />
                  <Route path='manage-tests' element={<ManageTests/>} />
                  <Route path='manage-questions' element={<ManageQuestions/>} />
+                 <Route path='lectures' element={<AdminLectures/>} />
                  <Route path='blogs' element={<Blogs/>} />
                  <Route path='course-enrollments' element={<CourseEnrollments/>} />
                  <Route path='users' element={<UsersList/>} />
