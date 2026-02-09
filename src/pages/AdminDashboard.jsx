@@ -36,6 +36,7 @@ const menuItems = [
   { id: "users", name: "User Management", icon: <Users size={20} /> },
   {id: "manage-prep", name: "Prep Tests", icon: <BookOpen size={20} /> },
  {id:"attempt-tests", name:"Test Attempts", icon:<ClipboardList size={20} />},
+ {id:"teachers-applications", name:"Teacher Applications", icon:<Users size={20} />},
   { id: "contacts", name: "Messages", icon: <Mail size={20} /> },
    {id: "lectures", name:"lectures", icon:<Upload size={20}/>},
   { id: "blogs", name: "Blog Posts", icon: <FileText size={20} /> },

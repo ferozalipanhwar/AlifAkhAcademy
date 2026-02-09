@@ -1,8 +1,8 @@
 import { BookOpen, GraduationCap, MessageSquare, Users } from "lucide-react";
 
-const EducationSection = () => {
+const EducationSection = ({id}) => {
   return (
-    <section className="relative py-20 bg-white overflow-hidden">
+    <section id={id} className="relative py-20 bg-white overflow-hidden">
       {/* Optional Background Decoration */}
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-emerald-50 rounded-full opacity-50 blur-3xl"></div>
       <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-blue-50 rounded-full opacity-50 blur-3xl"></div>

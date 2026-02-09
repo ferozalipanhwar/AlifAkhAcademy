@@ -40,9 +40,9 @@ const features = [
   },
 ];
 
-const FeaturesSection = () => {
+const FeaturesSection = ({id}) => {
   return (
-    <section className="relative bg-gray-50 py-20 px-6 md:px-12 overflow-hidden">
+    <section id={id} className="relative bg-gray-50 py-20 px-6 md:px-12 overflow-hidden">
       
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">

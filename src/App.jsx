@@ -1,7 +1,6 @@
 
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import './App.css'
-import AboutUs from './components/About/AboutUs'
 import AdminStastics from './components/Admin/Courses/AdminStastics'
 import Blogs from './components/Admin/Courses/Blogs'
 import Contacts from './components/Admin/Courses/Contacts'
@@ -17,26 +16,23 @@ import Teachers from './components/Admin/Courses/Teachers'
 import UsersList from './components/Admin/Courses/UsersList'
 import AdminLectures from './components/Admin/Lecture/AdminLectures'
 import AttemptTest from './components/Admin/prepComponent/attemptTests/AttemptTest'
+import TeacherApplication from './components/Admin/TeacherApplication/TeacherApplication'
 import BlogSection from './components/Blog/BlogSection'
-import ContactSection from './components/Contact/ContactSection'
 import CourseRoadmap from './components/Courses/CourseRoadmap'
-import CoursesSection from './components/Courses/CoursesSection'
-import EducationSection from './components/education/EducationSection'
-import FeaturesSection from './components/Feature/FeatureSection'
-import Footer from './components/Footer/Footer'
-import Home from './components/home/Home'
 import Login from './components/LoginRegister/Login'
 import Register from './components/LoginRegister/Register'
-import Navbar from './components/navbar/Navbar'
-import ProgramSection from './components/program/ProgramSection'
-import TeachersSection from './components/Teachers/TeachersSection'
-import TestimonialsSection from './components/Testimonials/TestimonialsSection'
 import PageNotFOund from './components/UniversalComponents/PageNotFound'
 import AdminDashboard from './pages/AdminDashboard'
 import AiTutor from './pages/AiTutor'
 import BlogDetail from './pages/BlogDetail'
 import CoursePlayer from './pages/CoursePlayer'
 import CourseRegister from './pages/CourseRegister'
+import BecomeTeacher from './pages/footerpages/BecomeTeacher'
+import HelpSupport from './pages/footerpages/HelpSupport'
+import PrivacyPolicy from './pages/footerpages/PrivacyPolicy'
+import TeacherRegistrationForm from './pages/footerpages/TeacherRegistrationForm'
+import TermsOfService from './pages/footerpages/TermsOfService'
+import HomePage from './pages/HomePage'
 import StartPreparationPage from './pages/prepTest/StartPreparationPage'
 import Profile from './pages/Profile'
 import MyResults from './pages/TakeTest/MyResults'
@@ -51,19 +47,8 @@ function App() {
             path=""
             element={
               <>
-            
-                <Navbar />
-                <Home />
-                <EducationSection />
-                <FeaturesSection />
-                <CoursesSection />
-                <ProgramSection />
-                <TeachersSection />
-                <TestimonialsSection />
-                <BlogSection />
-                <ContactSection />
-                <AboutUs />
-                <Footer />
+            <HomePage/>
+               
               </>
             }
           />
@@ -76,6 +61,12 @@ function App() {
           <Route path="/view-certificate" element={<MyResults />} />
           <Route path='verify-certificate' element={<VerifyCertificate/>}/>
           <Route path="/prep-test" element={<StartPreparationPage />} />
+        
+          <Route path="/support" element={<HelpSupport />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/become-teacher" element={<BecomeTeacher />} /> 
+          <Route path="/teacher-register" element={<TeacherRegistrationForm />} />
           <Route path="/course-register" element={<><CourseRoadmap/><CourseRegister /> </>} />
           <Route path="/blogs" element={<BlogSection />} />
           <Route path="/blog/:id" element={<BlogDetail />} /> 
@@ -90,6 +81,7 @@ function App() {
                  <Route path='contacts' element={<Contacts/>} />
                  <Route path='manage-categories' element={<ManageCategories/>} />
                  <Route path='manage-tests' element={<ManageTests/>} />
+                 <Route path='teachers-applications' element={<TeacherApplication/>} />
                  <Route path='manage-questions' element={<ManageQuestions/>} />
                  <Route path='lectures' element={<AdminLectures/>} />
                  <Route path='blogs' element={<Blogs/>} />

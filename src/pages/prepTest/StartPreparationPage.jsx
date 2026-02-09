@@ -1,24 +1,18 @@
 import { Sparkles } from "lucide-react";
 import { useState } from "react";
 import DynamicNavbar from "./DynamicNavbar"; // Import the NEW navbar
-import SubjectDashboard from "./SubjectDashboard"; // Import the dashboard from previous step
+import SubjectDashboard from "./SubjectDashboard"; // Import the dashboard
 
 const StartPreparationPage = () => {
   const [activeSubject, setActiveSubject] = useState(null);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
-    
-
-    
-
-      {/* 2. Spacer to push content below fixed navbar */}
-      <div className="h-20" /> 
-
-      {/* 3. Prep Subject Navbar (Horizontal Scroll) */}
+      
+      {/* 1. Navbar (Sticky Top) - No extra spacer needed above it */}
       <DynamicNavbar active={activeSubject} onSelect={setActiveSubject} />
 
-      {/* 4. Main Content */}
+      {/* 2. Main Content */}
       <div className="flex-1 max-w-6xl mx-auto w-full px-4 py-8">
         
         {/* SAFETY CHECK: Only render dashboard if activeSubject exists */}

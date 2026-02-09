@@ -34,7 +34,7 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-bold text-lg mb-4">Quick Links</h3>
             <ul className="space-y-3 text-sm">
-              <FooterLink text="Home" href="#" />
+              <FooterLink text="Home" href="/" />
               <FooterLink text="About Us" href="#AboutUs" />
               <FooterLink text="Our Courses" href="#Courses" />
               <FooterLink text="Expert Teachers" href="#Teachers" />
@@ -47,12 +47,12 @@ const Footer = () => {
             <h3 className="text-white font-bold text-lg mb-4">Resources</h3>
             <ul className="space-y-3 text-sm">
               <FooterLink text="Student Portal" href="/profile" />
-              <FooterLink text="Become a Teacher" href="/register" />
-              <FooterLink text="Test Preparation" href="/take-test" />
-              <FooterLink text="Privacy Policy" href="#" />
-              <FooterLink text="Terms of Service" href="#" />
-              <FooterLink text="Help & Support" href="#" />
-                 <FooterLink text="Verify-certificate" href="/verify-certificate" />
+              <FooterLink text="Become a Teacher" href="/become-teacher" />
+              <FooterLink text="Test Preparation" href="/prep-test" />
+              <FooterLink text="Privacy Policy" href="/privacy-policy" />
+              <FooterLink text="Terms of Service" href="/terms" />
+              <FooterLink text="Help & Support" href="/support" />
+              <FooterLink text="Verify Certificate" href="/verify-certificate" />
             </ul>
           </div>
 
@@ -63,8 +63,8 @@ const Footer = () => {
               <li className="flex items-start gap-3">
                 <MapPin className="text-emerald-500 shrink-0" size={20} />
                 <span>
-                  near baba aata chaki , post office road,<br />
-                  badin sindh, Pakistan
+                  Near Baba Aata Chaki, Post Office Road,<br />
+                  Badin, Sindh, Pakistan
                 </span>
               </li>
               <li className="flex items-center gap-3">
@@ -77,6 +77,7 @@ const Footer = () => {
               </li>
             </ul>
           </div>
+
         </div>
 
         {/* Divider */}
@@ -86,9 +87,9 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between text-sm text-gray-500">
           <p>&copy; {new Date().getFullYear()} Alif-Akh Academy. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
-            <a href="#" className="hover:text-emerald-400 transition-colors">Privacy</a>
-            <a href="#" className="hover:text-emerald-400 transition-colors">Cookies</a>
-            <a href="#" className="hover:text-emerald-400 transition-colors">Terms</a>
+            <a href="/privacy-policy" className="hover:text-emerald-400 transition-colors">Privacy</a>
+            <a href="/help-support" className="hover:text-emerald-400 transition-colors">Help & Support</a>
+            <a href="/terms" className="hover:text-emerald-400 transition-colors">Terms</a>
           </div>
         </div>
       </div>
@@ -96,7 +97,7 @@ const Footer = () => {
   );
 };
 
-// Helper Components to keep code clean
+// Helper Components
 const SocialIcon = ({ icon, href }) => (
   <a 
     href={href} 

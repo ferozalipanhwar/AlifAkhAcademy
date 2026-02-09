@@ -28,6 +28,7 @@ const TakeTest = () => {
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex flex-col justify-center items-center p-6 font-sans">
+     
         
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}

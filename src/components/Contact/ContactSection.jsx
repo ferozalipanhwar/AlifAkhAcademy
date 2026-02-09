@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import API from "../../apiHelper/api.js";
 
-const ContactSection = () => {
+const ContactSection = ({ id }) => {
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -43,7 +43,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="Contact" className="py-20 bg-gray-50 relative overflow-hidden">
+    <section id={id} className="py-20 bg-gray-50 relative overflow-hidden">
       
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-64 bg-emerald-600 skew-y-3 transform -translate-y-20 origin-top-left z-0"></div>

@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import API from "../../apiHelper/api";
 
-const TeachersSection = () => {
+const TeachersSection = ({id}) => {
   const [teachers, setTeachers] = useState([]);
 
   const fetchTeachers = async () => {
@@ -54,7 +54,7 @@ const TeachersSection = () => {
 
   // Reusable Teacher Card
   const TeacherCard = ({ teacher }) => (
-    <div className="group bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-full">
+    <div id={id} className="group bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-full">
       {/* Card Header Gradient */}
       <div className="h-24 bg-gradient-to-r from-emerald-500 to-green-600 relative">
         <div className="absolute -bottom-10 inset-x-0 flex justify-center">

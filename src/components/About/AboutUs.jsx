@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Award, CheckCircle } from "lucide-react";
 
-const AboutUs = () => {
+const AboutUs = ({ id }) => {
   return (
-    <section id="AboutUs" className="relative py-20 bg-white overflow-hidden">
+    <section id={id} className="relative py-20 bg-white overflow-hidden">
       
       {/* Background Patterns */}
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-emerald-50 rounded-full blur-3xl opacity-60"></div>

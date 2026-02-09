@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 // import '../../style/home.css'; // You can keep this if you have custom styles
 
-const Home = () => {
+const Home = ({id}) => {
     const slides = [
         {
             id: 1,
@@ -36,7 +36,7 @@ const Home = () => {
     }, [slides.length]);
 
     return (
-        <section id='Home' className="relative w-full h-screen overflow-hidden">
+        <section id={id} className="relative w-full h-screen overflow-hidden">
             {/* Background Image with Overlay */}
             <div 
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 transform scale-105"

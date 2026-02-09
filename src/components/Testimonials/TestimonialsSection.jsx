@@ -37,7 +37,7 @@ const testimonials = [
   },
 ];
 
-const TestimonialsSection = () => {
+const TestimonialsSection = ({id}) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -60,7 +60,7 @@ const TestimonialsSection = () => {
 
   return (
     <section 
-      id="Testimonials" 
+      id={id} 
       className="py-20 bg-white relative overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

@@ -13,7 +13,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import API from "../../apiHelper/api.js";
 
-const CoursesSection = () => {
+const CoursesSection = ({id}) => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -120,7 +120,7 @@ const CoursesSection = () => {
   );
 
   return (
-    <section id="Courses" className="py-20 px-6 md:px-12 bg-gray-50 relative overflow-hidden">
+    <section id={id} className="py-20 px-6 md:px-12 bg-gray-50 relative overflow-hidden">
       {/* Background Decoration */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
 

@@ -1,15 +1,16 @@
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Award,
-  BookOpen,
-  Calendar,
-  Clock,
-  Download,
-  LayoutDashboard,
-  Loader2,
-  LogOut,
-  ShieldCheck,
-  User as UserIcon
+   Award,
+   BookOpen,
+   Calendar,
+   Clock,
+   Download,
+   Home, // Added Home Icon
+   LayoutDashboard,
+   Loader2,
+   LogOut,
+   ShieldCheck,
+   User as UserIcon
 } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -35,7 +36,7 @@ const Profile = () => {
     const fetchData = async () => {
       if (!user) return;
       try {
-        // Fetches enrolled courses (Note: Ensure backend populates courseId and teacherId)
+        // Fetches enrolled courses
         const [coursesRes, resultsRes] = await Promise.all([
           API.get(`/students/my-courses/${user._id}`),
           API.get("/tests/my-results")
@@ -78,10 +79,21 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-[#F3F4F6] pb-20 font-sans">
-      
+        
       {/* Header Background */}
       <div className="h-64 bg-gradient-to-r from-emerald-800 to-teal-700 relative overflow-hidden">
          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+         
+         {/* === NEW BACK HOME BUTTON === */}
+         <div className="absolute top-6 left-6 z-10">
+            <Link 
+                to="/" 
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white rounded-xl transition-all font-bold text-sm shadow-sm"
+            >
+                <Home size={16} />
+                Back Home
+            </Link>
+         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative -mt-32">
@@ -129,7 +141,7 @@ const Profile = () => {
 
           {/* ================= RIGHT MAIN CONTENT ================= */}
           <div className="lg:col-span-3">
-             
+              
              <div className="flex gap-2 mb-6 lg:hidden overflow-x-auto pb-2">
                 <MobileTab active={activeTab === 'courses'} onClick={() => setActiveTab('courses')} label="Courses" />
                 <MobileTab active={activeTab === 'certificates'} onClick={() => setActiveTab('certificates')} label="Certificates" />
@@ -218,55 +230,55 @@ const Profile = () => {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
                   >
-                     <h2 className="text-2xl font-bold text-gray-900 mb-6">My Certificates</h2>
-                     
-                     {loading ? (
-                        <div className="flex justify-center p-20"><Loader2 className="animate-spin text-emerald-600" size={32}/></div>
-                     ) : certificates.length === 0 ? (
-                        <div className="bg-white rounded-3xl p-10 text-center shadow-sm border border-gray-100">
-                           <Award size={40} className="mx-auto mb-4 text-gray-300" />
-                           <h3 className="text-xl font-bold text-gray-900 mb-2">No Certificates Yet</h3>
-                           <p className="text-gray-500 mb-6 text-sm">Pass an evaluation to unlock your credentials.</p>
-                        </div>
-                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                           {certificates.map((cert) => (
-                              <div key={cert._id} className="bg-white rounded-3xl p-5 shadow-sm hover:shadow-md border border-gray-100 flex flex-col relative overflow-hidden group">
-                                 <div className="absolute top-0 left-0 w-2 h-full bg-yellow-400 group-hover:bg-emerald-500 transition-colors"></div>
-                                 <div className="pl-4">
-                                    <div className="flex justify-between items-start mb-3">
-                                       <div className="p-2 bg-yellow-50 text-yellow-600 rounded-lg">
-                                          <Award size={20} />
-                                       </div>
-                                       <span className="text-[10px] font-bold bg-green-50 text-green-700 px-2.5 py-1 rounded-full uppercase tracking-wider border border-green-100">
-                                          {cert.grade || "A"} GRADE
-                                       </span>
-                                    </div>
-                                    <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-1">{cert.testId?.title || "Test Achievement"}</h3>
-                                    <p className="text-xs text-gray-400 mb-5 flex items-center gap-1">
-                                       <Calendar size={12}/> {new Date(cert.createdAt).toLocaleDateString()}
-                                    </p>
-                                    <div className="bg-gray-50 rounded-2xl p-4 mb-5 grid grid-cols-2 gap-4 text-center">
-                                       <div className="border-r border-gray-200">
-                                          <p className="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">Score</p>
-                                          <p className="font-bold text-gray-800">{cert.score}/{cert.totalMarks}</p>
-                                       </div>
-                                       <div>
-                                          <p className="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">Result</p>
-                                          <p className="font-bold text-emerald-600">{cert.percentage || Math.round((cert.score/cert.totalMarks)*100)}%</p>
-                                       </div>
-                                    </div>
-                                    <button 
-                                       onClick={() => setSelectedCertificate(cert)}
-                                       className="w-full py-3 bg-gray-900 text-white rounded-2xl font-bold text-xs flex items-center justify-center gap-2 hover:bg-emerald-600 transition-all shadow-md"
-                                    >
-                                       <Download size={14} /> View & Download
-                                    </button>
-                                 </div>
-                              </div>
-                           ))}
-                        </div>
-                     )}
+                      <h2 className="text-2xl font-bold text-gray-900 mb-6">My Certificates</h2>
+                      
+                      {loading ? (
+                         <div className="flex justify-center p-20"><Loader2 className="animate-spin text-emerald-600" size={32}/></div>
+                      ) : certificates.length === 0 ? (
+                         <div className="bg-white rounded-3xl p-10 text-center shadow-sm border border-gray-100">
+                            <Award size={40} className="mx-auto mb-4 text-gray-300" />
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">No Certificates Yet</h3>
+                            <p className="text-gray-500 mb-6 text-sm">Pass an evaluation to unlock your credentials.</p>
+                         </div>
+                      ) : (
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {certificates.map((cert) => (
+                               <div key={cert._id} className="bg-white rounded-3xl p-5 shadow-sm hover:shadow-md border border-gray-100 flex flex-col relative overflow-hidden group">
+                                  <div className="absolute top-0 left-0 w-2 h-full bg-yellow-400 group-hover:bg-emerald-500 transition-colors"></div>
+                                  <div className="pl-4">
+                                     <div className="flex justify-between items-start mb-3">
+                                        <div className="p-2 bg-yellow-50 text-yellow-600 rounded-lg">
+                                           <Award size={20} />
+                                        </div>
+                                        <span className="text-[10px] font-bold bg-green-50 text-green-700 px-2.5 py-1 rounded-full uppercase tracking-wider border border-green-100">
+                                           {cert.grade || "A"} GRADE
+                                        </span>
+                                     </div>
+                                     <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-1">{cert.testId?.title || "Test Achievement"}</h3>
+                                     <p className="text-xs text-gray-400 mb-5 flex items-center gap-1">
+                                        <Calendar size={12}/> {new Date(cert.createdAt).toLocaleDateString()}
+                                     </p>
+                                     <div className="bg-gray-50 rounded-2xl p-4 mb-5 grid grid-cols-2 gap-4 text-center">
+                                        <div className="border-r border-gray-200">
+                                           <p className="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">Score</p>
+                                           <p className="font-bold text-gray-800">{cert.score}/{cert.totalMarks}</p>
+                                        </div>
+                                        <div>
+                                           <p className="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">Result</p>
+                                           <p className="font-bold text-emerald-600">{cert.percentage || Math.round((cert.score/cert.totalMarks)*100)}%</p>
+                                        </div>
+                                     </div>
+                                     <button 
+                                        onClick={() => setSelectedCertificate(cert)}
+                                        className="w-full py-3 bg-gray-900 text-white rounded-2xl font-bold text-xs flex items-center justify-center gap-2 hover:bg-emerald-600 transition-all shadow-md"
+                                     >
+                                        <Download size={14} /> View & Download
+                                     </button>
+                                  </div>
+                               </div>
+                            ))}
+                         </div>
+                      )}
                   </motion.div>
                 )}
              </AnimatePresence>

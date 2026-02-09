@@ -60,9 +60,9 @@ const programs = [
   },
 ];
 
-const ProgramSection = () => {
+const ProgramSection = ({id}) => {
   return (
-    <section id="Programs" className="py-20 bg-white relative overflow-hidden">
+    <section id={id} className="py-20 bg-white relative overflow-hidden">
       
       {/* Background Dots */}
       <div className="absolute top-0 left-0 w-40 h-40 bg-[url('https://www.transparenttextures.com/patterns/dots.png')] opacity-10"></div>
